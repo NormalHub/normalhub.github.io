@@ -1,0 +1,119 @@
+html,body{
+  width:100%;
+  height:100%;
+  background:#f1f8fa;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0px;
+}
+.waiting{
+  position: fixed;
+  margin: auto;
+  top: 20px;
+  left: 10px;
+  background: #252c34;
+  color: #fff;
+  transition: 1.5s;
+  border-radius: 5px;
+  padding: 4px 10px;
+  z-index: 10;
+}
+.tbl{
+  height: 100%;
+  width: 88px;
+  background:#fff;
+  text-align: center;
+  float: left;
+  font-size: 20px;
+  line-height: 60px;
+}
+.tbl :hover{
+  border-bottom: 2px #000 solid;
+}
+.toubulan{
+  width:100%;
+  height:60px;
+  background:#fff;
+  position: fixed;
+  top: 0px;
+  z-index: 10;
+  display: flex;
+}
+.tianchong{
+  height:65px;
+  width:100%;
+}
+.juzhong{
+  width: 80%;
+  min-height: 100%;
+  background: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  line-height: 10px;
+}
+#title{
+  text-align: center;
+  font-size: 18px;
+}
+#time{
+  position: relative;
+  left: 50%;
+}
+#content{
+  text-indent: 2em;
+  line-height: 21px;
+}
+#sender{text-align: right;}
+::-webkit-scrollbar{width:0px;}
+a{
+  text-decoration:none;
+  color:black;
+}
+#discussions{
+  max-width: 900px;
+  min-height: 700px;
+  margin: 10px 15px;
+}
+#discussions .header{
+  font-size: 23px;
+  line-height: 5px;
+  color: #292929;
+}
+.discussion{
+  width: 100%;
+  display: flex;
+}
+.discussionContent{
+  flex: 1;
+  padding: 7px 0px;
+  font-size: 16px;
+  line-height: 20px;
+  color: #292827;
+}
+.discuss{
+  width: 100%;
+  max-width: 1000px;
+  height: 100px;
+  position: sticky;
+  top: 60px;
+  display: flex;
+  border: 1px solid black;
+  background: #fff;
+}
+.discuss .discussionContent{
+  position: relative;
+}
+#discussContent{
+  width: 100%;
+  height: 100%;
+  background: none;
+  padding: 0px;
+  border: 0px;
+  font-size: 16px;
+  resize:none;
+}
+#discussContent:focus{
+  border: 0px;
+  outline: 0px;
+}

@@ -1,0 +1,194 @@
+html,body{
+  width:100%;
+  height:100%;
+  background:#f1f8fa;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0px;
+}
+.waiting{
+  position: fixed;
+  margin: auto;
+  top: 20px;
+  left: 10px;
+  background: #252c34;
+  color: #fff;
+  transition: 1.5s;
+  border-radius: 5px;
+  padding: 4px 10px;
+  z-index: 10;
+}
+.tbl{
+  height: 100%;
+  width: 88px;
+  background:#fff;
+  text-align: center;
+  float: left;
+  font-size: 20px;
+  line-height: 60px;
+}
+.tbl :hover{
+  border-bottom: 2px #000 solid;
+}
+.toubulan{
+  width:100%;
+  height:60px;
+  background:#fff;
+  position: fixed;
+  top: 0px;
+  z-index: 10;
+  display: flex;
+}
+.sousuokuang{
+  width:100px;
+  height:30px;
+  margin: auto 0;
+  padding: 0px 10px;
+  font-size: 15px;
+  transition: 0.3s;
+  float: left;
+  border: 0px;
+  background-color: #ededed;
+}
+.sousuokuang:focus{
+  width:200px;
+  border: 0px;
+  outline: 0px;
+}
+.tianchong{
+  height:65px;
+  width:100%;
+}
+.juzhong{
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+a{
+  text-decoration:none;
+  color:black;
+}
+.opu{
+  width: 40%;
+  height: 100%;
+  max-width: 500px;
+}
+.box{
+  width: 100%;
+  height: 80px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #2c2c2c;
+  background: #fff;
+  display: block;
+  border-radius: 10px;
+  box-shadow: #cdcdcd 0 0 10px;
+}
+.box .type{
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 50%;
+  color: #3c3c3c;
+  margin: 3px;
+  float: left;
+}
+.box .title{
+  line-height: 30px;
+  margin: 3px;
+}
+#guestNumber::before{
+  content: "访问人次 : ";
+}
+.postings{
+  flex: 1;
+  display: flex;
+  padding: 0 5px;
+  flex-direction: column;
+  font-size: 17px;
+}
+.publishingPost{
+  font-size: 16px;
+  height: 0;
+  overflow: hidden;
+  color: #222b2c;
+  transition: 0.3s;
+  background: #fff;
+}
+.publishingPost input{
+  width: 80%;
+  max-width: 450px;
+  height: 25px;
+  border: 0;
+  background: #f6f6f6;
+  font-family: monospace;
+  font-size: 16px;
+  margin: 15px 0;
+}
+.publishingPost input:focus,.publishingPost textarea:focus{
+  outline: 0;
+}
+.publishingPost textarea{
+  width: 80%;
+  max-width: 450px;
+  background: #f6f6f6;
+  font-size: 16px;
+  height: 300px;
+  border: 0;
+  max-height: 300px;
+}
+.publishingPost p{
+  width: 80%;
+  margin: 0 auto;
+  max-width: 50px;
+  text-align: center;
+  cursor: pointer;
+  background: #f1f1f1;
+}
+.postingdiv{
+  display: block;
+  margin-top: 10px;
+  padding: 5px 10px;
+  color: #2c2c2c;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: #cdcdcd 0 0 10px;
+}
+.postingsButton{
+  cursor: pointer;
+  width: 40px;
+  text-align: center;
+  background: #27bae7;
+  padding: 10px 5px;
+  color: #fff;
+}
+#postings{
+  flex: 1;
+  color: #8b8888;
+}
+.buttomdiv{
+  width: 100%;
+  height: 60px;
+  background: #2c2c2c;
+  font-size: 18px;
+  color: #fff;
+  text-align: center;
+}
+::-webkit-scrollbar {
+  width:0px;
+}
+@media screen and (max-width: 600px){
+.juzhong{
+  display: block;
+}
+.opu{
+  width: 100%;
+  max-width: none;
+  margin-top: 15px;
+}
+.box{
+  border-radius: 0;
+}
+}

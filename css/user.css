@@ -1,0 +1,140 @@
+body{
+    justify-content: center;
+}
+#body{
+    width: 80%;
+    padding-top: 75px;
+    font-family:楷体;
+}
+.waiting{
+    position: fixed;
+    margin: auto;
+    top: 40px;
+    background: #252c34;
+    color: #fff;
+    transition: 1s;
+    border-radius: 5px;
+    padding: 4px 10px;
+    z-index: 3;
+}
+.signUpDiv{
+    width: 70%;
+    aspect-ratio: 5 / 3;
+    max-width: 850px;
+    position: fixed;
+    right: 0px;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    margin: auto;
+    padding: 10px;
+    background: #f7fafd;
+    border-radius: 10px;
+    z-index: 4;
+    box-shadow: 0 0 30px #a5a4a4;
+}
+.signUpDiv p:first-child{
+    font-size: 28px;
+}
+.signUpDiv p{
+    text-align: center;
+    color: #543218;
+    font-size: 19px;
+}
+.signUpDiv :nth-child(6){
+    position: absolute;
+    right: 10%;
+    bottom: 10%;
+    font-size: 15px;
+    line-height: 0px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.signUpDiv input{
+    width: 200px;
+    height: 33px;
+    margin: 0px 10px;
+    font-size: 17px;
+    transition: 0.1s;
+}
+.signUpDiv input:focus{
+    font-size: 21px;
+}
+.signUpDiv input::placeholder{
+    color: #ff3838;
+    font-size: 16px;
+}
+.signUpDiv input::-webkit-input-placeholder{color: #ff3838;}
+.signUpDiv input:-ms-input-placeholder{color: #ff3838;}
+.signUpDiv div{
+    background: #7ef065;
+    width: 60px;
+    padding: 5px;
+    margin: auto;
+    border-radius: 5px;
+    box-shadow: 0 10px 10px #a5a4a4;
+    transition: 70ms;
+    cursor: pointer;
+}
+.signUpDiv div:active{
+    background-color: #6ee454;
+    box-shadow: 0 4px 4px #a5a4a4;
+    transform: translateY(5px);
+}
+.signUpDiv div :first-child{
+    font-size: 19px;
+    line-height: 0px;
+}
+@keyframes error_password{
+    0%   {transform: translateX(4px)translateY(5px);}
+	10%   {transform: translateX(6px)translateY(-5px);}
+	65%  {transform: translateX(-4px)translateY(5px);}
+	75%  {transform: translateX(-6px)translateY(-5px);}
+    100%   {transform: translateX(0px);}
+}
+.background{
+    width: 100%;
+    height: 100%;
+    background: #00000080;
+    position: fixed;
+    z-index: 3;
+}
+#avatar{
+    width: 180px;
+    height: 180px;
+    background: #b3cfa8;
+    border-radius: 50%;
+    margin: 0px 10px 10px 0px;
+    float: left;
+}
+#body p{
+    font-size: 22px;
+    line-height: 0px;
+}
+.userBox{
+    display: flex;
+    align-items: center;
+}
+#userName::before{
+    content: "名称:";
+    color: #5c5858;
+}
+#coins::before{
+    content: "硬币:";
+    color: #5c5858;
+}
+.userGrade{
+    color: #5c5858;
+}
+#userGrade{
+    width: 42px;
+    height: 23px;
+    border-radius: 3px;
+    background: #89daff;
+    border: 2px solid #64cdff;
+    text-align: center;
+    line-height: 23px;
+    color: #fff;
+    font-weight: bolder;
+    font-size: 18px;
+}
