@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="keywords" id="pagekeywords">
+  <meta name="description" content="选择一个视频才能播放哦">
+  <title id="pageTitle">视频播放</title>
+  <link rel="icon" href="../imgs/xie.png">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" type="text/css" href="../css/video.css"/>
+</head>
+<body>
+  <div class="toubulan">
+      <div class="tbl"><a href="./index.html">首页</a></div>
+      <div class="tbl"><a href="./userCentre.html">空间</a></div>
+      <div class="tbl"><a href="./video/index.html">视频</a></div>
+      <input class="sousuokuang"/>
+      <div class="tbl">搜索</div>
+    </div>
+  <div class="tianchong"></div>
+  <div class="left">
+    <div id="title">请选择视频观看</div>
+    <div id="opusTime">__ / __ / __</div>
+    <div id="VideoPlayer">
+      <video id="video" ondblclick="RequestFullscreen()" onclick="PlayOrPause()"></video> 
+      <div id="bottom">
+        <div id="ProgressBarOuter"><div id="ProgressBar"></div></div>
+        <div id="play" onclick="PlayOrPause()"></div>
+        <p id="progressNumber">0:00/00:00</p>
+        <div id="fullscreen" onclick="RequestFullscreen()"></div>
+        <div class="setting" title="待开发"></div>
+        <div class="speed" onmouseenter="Speed()"><p id="speed">倍速</p></div>
+        <div class="volume" onmouseenter="Volume()"></div>
+      </div>
+      <div onmouseleave="Volume()" id="volume"><div id="volumeBar"></div></div>
+      <div id="volumeOuter"><p id="volumeNumber">100%</p></div>
+      <div id="speedMenu" onmouseleave="Speed()">
+        <div onclick="speedChoicesClick(2)"><p>2X</p></div><div onclick="speedChoicesClick(1.5)"><p>1.5X</p></div>
+        <div onclick="speedChoicesClick(1.5)"><p>1.25X</p></div>
+        <div onclick="speedChoicesClick(1)"><p>1X</p></div><div onclick="speedChoicesClick(0.5)"><p>0.5X</p></div>
+      </div>
+    </div>
+    <div id="introduction">________</div>
+    <div id="discussions">
+      <div class="discuss">
+        <div class="discussionUser">
+          <div class="avatar" id="avatar"></div>
+          <p id="name"></p>
+        </div>
+        <div class="discussionContent">
+          <textarea id="discussContent" placeholder="Your discussions are the most encouragement for me!" maxlength="250"></textarea>
+          <div class="emoticon" title="表情" id="displayEmo">🙂</div>
+          <div id="emoticon"></div>
+        </div>
+        <div class="send" id="send"><p>发送</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="right" id="videoTable"></div>
+  <script type="module" src="../js/discuss.js"></script>
+  <script type="text/javascript" src="../js/VideoPlayer.js"></script>
+</body>
+</html>
