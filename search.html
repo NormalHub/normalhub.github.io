@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="normalHub">
+  <title>搜素</title>
+  <link rel="icon" href="./imgs/xie.png">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, user-scalable=0">
+  <style>
+    html,body{
+      width:100%;
+      background:#f1f8fa;
+      margin: 0px;
+      font-size: 18px;
+    }
+    .tbl{
+      height: 100%;
+      width: 88px;
+      background:#fff;
+      text-align: center;
+      float: left;
+      font-size: 20px;
+      line-height: 60px;
+    }
+    .tbl :hover{border-bottom: 2px #000 solid;}
+    .toubulan{
+      width:100%;
+      height:60px;
+      background:#fff;
+      position: fixed;
+      top: 0px;
+      z-index: 10;
+      display: flex;
+    }
+    .tianchong{
+      height:65px;
+      width:100%;
+    }
+    a{
+      text-decoration:none;
+      color:black;
+    }
+    ::-webkit-scrollbar{width:0px;}
+    .get{
+      width: 280px;
+      min-height: 100px;
+      margin: 10px 5px 0 5px;
+      padding: 10px;
+      background: #fff;
+      display: block;
+    }
+    #key{
+      width: 280px;
+      padding: 10px;
+      background: #fff;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="toubulan">
+    <div class="tbl"><a href="./index.html">首页</a></div>
+    <div class="tbl"><a href="./video/index.html">视频</a></div>
+  </div>
+  <div class="tianchong"></div>
+  <div id="key"></div>
+  <div id="outcome" style="width: 100%;display: flex;flex-wrap: wrap;justify-content: center;"></div>
+</body>
+<script type="text/javascript">
+  document.getElementById("key").innerHTML = "你的搜索："+decodeURI(window.location.search.slice(1));
+  var key = new RegExp(decodeURI(window.location.search.slice(1)));
+  var getOpus=new XMLHttpRequest();
+  getOpus.open("GET", "./document/wokes", true);
+  getOpus.onreadystatechange = function(){
+    if(getOpus.readyState==4 && getOpus.status==200){
+      var opus = getOpus.responseText.split("\n");
+      for(var times=opus.length;times--;times>0){
+        if(!key.test(opus[times])){continue;}
+        var opusInformation = opus[times].split("&&");
+        var type=opusInformation[0].split("=")[1];
+        var opusUrl=opusInformation[2].split("=")[1];
+        var opusName=opusInformation[1].split("=")[1];
+        var time=opusInformation[4].split("=")[1];
+        if(type=="视"){opusUrl="./video/?"+opusUrl;}
+        wokes(opusName,opusUrl,time);
+      }
+    }
+  };
+  getOpus.send();
+  function wokes(opusName,opusUrl,time){
+    var get = document.createElement("a");
+    get.classList.add("get");
+    get.href = opusUrl;
+    get.innerHTML = opusName+"<br>"+time;
+    document.getElementById("outcome").appendChild(get);
+  }
+</script>
+</html>
