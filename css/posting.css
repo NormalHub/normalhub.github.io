@@ -52,68 +52,49 @@ html,body{
   font-size: 16px;
   line-height: 10px;
 }
-#title{
-  text-align: center;
-  font-size: 18px;
-}
-#time{
-  position: relative;
-  left: 50%;
-}
 #content{
   text-indent: 2em;
   line-height: 21px;
 }
-#sender{text-align: right;}
+#description{text-align: right;}
 ::-webkit-scrollbar{width:0px;}
 a{
   text-decoration:none;
   color:black;
 }
 #discussions{
-  max-width: 900px;
+  width: 100%;
   min-height: 700px;
   margin: 10px 15px;
 }
-#discussions .header{
-  font-size: 23px;
-  line-height: 5px;
-  color: #292929;
-}
-.discussion{
-  width: 100%;
-  display: flex;
-}
-.discussionContent{
-  flex: 1;
-  padding: 7px 0px;
-  font-size: 16px;
-  line-height: 20px;
-  color: #292827;
-}
 .discuss{
-  width: 100%;
-  max-width: 1000px;
+  width: 80%;
   height: 100px;
-  position: sticky;
-  top: 60px;
+  position: fixed;
+  bottom: 0px;
   display: flex;
   border: 1px solid black;
   background: #fff;
 }
-.discuss .discussionContent{
-  position: relative;
-}
 #discussContent{
-  width: 100%;
-  height: 100%;
-  background: none;
-  padding: 0px;
-  border: 0px;
+  flex: 1;
+  padding: 5px;
   font-size: 16px;
+  line-height: 20px;
+  color: #292827;
+  background: none;
+  border: 0px;
   resize:none;
 }
 #discussContent:focus{
   border: 0px;
   outline: 0px;
+}
+#send{
+  width: 60px;
+  text-align: center;
+  height: 100%;
+  line-height: 100px;
+  color: #fff;
+  background: #51bcff;
 }

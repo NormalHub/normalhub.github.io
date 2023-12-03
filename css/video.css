@@ -81,6 +81,7 @@ a{
 .left{
   width: 65%;
   max-width: 1000px;
+  line-height: 100%;
 }
 .left #title{
   font-size: 22px;

@@ -115,27 +115,20 @@ a{
   overflow: hidden;
   color: #222b2c;
   transition: 0.3s;
+  position: relative;
   background: #fff;
 }
-.publishingPost input{
-  width: 80%;
-  max-width: 450px;
-  height: 25px;
-  border: 0;
-  background: #f6f6f6;
-  font-family: monospace;
-  font-size: 16px;
-  margin: 15px 0;
-}
-.publishingPost input:focus,.publishingPost textarea:focus{
+.publishingPost textarea:focus{
   outline: 0;
 }
 .publishingPost textarea{
+  margin-top: 5px;
   width: 80%;
   max-width: 450px;
   background: #f6f6f6;
   font-size: 16px;
   height: 300px;
+  padding: 5px;
   border: 0;
   max-height: 300px;
 }
@@ -179,6 +172,47 @@ a{
 ::-webkit-scrollbar {
   width:0px;
 }
+.emoticon{
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  font-size: 25px;
+  filter: grayscale(100%) contrast(180%) brightness(85%);
+  cursor: pointer;
+}
+#emoticon{
+  width: 320px;
+  height: 220px;
+  padding: 15px;
+  background-color: #ecf2f9;
+  border-radius: 5px;
+  box-shadow: #a5a4a4 0px 5px 10px;
+  position: absolute;
+  right: -20px;
+  bottom: 40px;
+  display: none;
+}
+.emoticonImgInDiscussion{
+  width: 30px;
+  height: 30px;
+  margin: 0px 2px;
+  background-size: 150px auto;
+  background-image: url("../imgs/emoticon.png");
+}
+.emoticonImg:hover{
+  background-color: #cdcdcd;
+}
+.emoticonImg{
+  width: 35px;
+  height: 35px;
+  margin: 2.5px;
+  background-size: 175px auto;
+  background-image: url("../imgs/emoticon.png");
+  float: left;
+}
+
 @media screen and (max-width: 600px){
 .juzhong{
   display: block;

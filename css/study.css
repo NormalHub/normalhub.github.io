@@ -129,41 +129,6 @@ a{
   text-decoration:none;
   color:black;
 }
-#conut{
-  position: absolute;
-  right: 100px;
-  line-height: 45px;
-  font-size: 17px;
-}
-.goal{
-  position: absolute;
-  right: 25px;
-  border-radius: 50%;
-  width: 45px;
-  height: 45px;
-  font-size: 17px;
-  line-height: 45px;
-  text-align: center;
-  background-color: #b3e5fc;
-  cursor: pointer;
-}
-#goal{
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  border-radius: 10px;
-  font-size: 17px;
-  background: #fff;
-  transition: 0.4s;
-  padding: 0 10px;
-  overflow: hidden;
-  z-index: 1;
-}
 background{
   width: 100%;
   height: 100%;
