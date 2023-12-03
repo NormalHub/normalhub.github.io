@@ -54,12 +54,12 @@ getOpus();
 async function getPostings(){
   var postings = document.getElementById("postings");
   const { data, error } = await supabase.from('posting').select();
-  if(data.length != 0){
-    postings.innerHTML= "";
-  }  
+  if(data.length != 0){postings.innerHTML= "";}
   for(var i=data.length;i--;i>0){
     var time = data[i].time;
-    var title = data[i].title;
+    if(time.indexOf("follow")!=-1){continue;}
+    var content = data[i].content;
+    if(content.length>20){content = content.slice(0,20)+"……";}
     var sender = data[i].sender;
     var d = new Date();
     d.setTime(Number(time));
@@ -87,7 +87,7 @@ async function getPostings(){
     var postingDiv = document.createElement("a");
     postingDiv.classList.add("postingdiv");
     postingDiv.href = "./posting.html?"+time;
-    postingDiv.innerHTML = "<div>标题："+title+"</div><div>时间："+date+"</div><div>发帖人："+sender+"</div>";
+    postingDiv.innerHTML = "<div>内容："+content+"</div><div>时间："+date+"</div><div>发帖人："+sender+"</div>";
     postings.appendChild(postingDiv);
   }
 }
@@ -109,8 +109,12 @@ document.getElementById("send").onclick = async function send(){
   if(user==""){
     var id = Math.floor(Math.random()*10000);
     var user = prompt("检测到未登录,请登录或直接输入名称","游客"+id);
+    var date = new Date();
+    date.setTime(date.getTime()+(365*24*60*60000));
+    var expires="expires="+date.toGMTString()+";";
+    var content="user_name="+user+";";
+    document.cookie=content+expires+"path=/";
   }
-  var title = document.getElementById("title").value;
   var content = document.getElementById("content").value;
   function alertTip(tipContent){
     var tip = document.createElement("div");
@@ -125,9 +129,6 @@ document.getElementById("send").onclick = async function send(){
   if(content=="" || !notNull.test(content)){
     alertTip("帖子不能为空");
     return;
-  }else if(title=="" || !notNull.test(title)){
-    alertTip("标题不能为空");
-    return;
   }
   var time = new Date().getTime();
   var tip = document.createElement("div");
@@ -140,7 +141,7 @@ document.getElementById("send").onclick = async function send(){
   setTimeout(function(){tip.remove();},2300)
   const { error } = await supabase
     .from('posting')
-    .insert({ sender:user, title:title, content:content, time:time });
+    .insert({ sender:user, content:content, time:time });
 }
 //获取人数
 async function getGuestNumber(){
@@ -150,6 +151,22 @@ async function getGuestNumber(){
   var date=d.getFullYear()+"/"+d.getMonth()+"/"+d.getDate();
   var {data,error}=await supabase.from('guestNumber').upsert({id:1, number:number+1, date:date}).select();
   document.getElementById("guestNumber").innerHTML=number+1;
-  //16,23/11/25
 }
 getGuestNumber();
+document.getElementById("search").onclick = search;
+function search(){
+  var key = document.getElementById("searchInput").value;
+  if(key==""){return;}
+  var a = document.createElement("a");
+  document.body.appendChild(a);
+  a.href = "./search.html?"+key;
+  a.click();
+}
+window.onkeydown = function (){
+  var key = event.key;
+  var element = document.activeElement.tagName;
+  if(element == "INPUT"){
+    if(key == "Enter"){search();}
+    return;
+  }
+}

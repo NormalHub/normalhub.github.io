@@ -160,19 +160,6 @@ function filltable(){
   ctx.closePath();
 }
 filltable();
-function goal(){
-  var goal = document.getElementById("goal");
-  goal.style.width = "80%";
-  goal.style.height = "80%";
-  var background = document.createElement("background");
-  document.body.appendChild(background);
-  background.onclick = function(){
-    goal.style.width = "0px";
-    goal.style.height = "0px";
-    background.remove();
-    background.onclick = null;
-  }
-}
 function count(){
   var today = new Date().getTime();
   var count_ms = Date.UTC(2025,6,20,16)-today;//2025年6月21日

@@ -64,6 +64,11 @@ document.getElementById("send").onclick = async function sendDiscussion(){
   if(user==""){
     var id = Math.floor(Math.random()*10000);
     var user = prompt("请输入用户名","游客"+id);
+    var date = new Date();
+    date.setTime(date.getTime()+(365*24*60*60000));
+    var expires="expires="+date.toGMTString()+";";
+    var content="user_name="+user+";";
+    document.cookie=content+expires+"path=/";
   }
   var content = discussContent.value;
   

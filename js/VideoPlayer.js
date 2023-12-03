@@ -182,9 +182,12 @@ function speedChoicesClick(s){
 
 //键盘事件
 window.onkeydown = function (){
-  var element = document.activeElement.tagName;
-  if(element == "TEXTAREA"||element == "INPUT"){return;}
   var key = event.key;
+  var element = document.activeElement.tagName;
+  if(element == "TEXTAREA"||element == "INPUT"){
+    if(key == "Enter"){search();}
+    return;
+  }
   if(key == " "){
     if (video.paused){ 
       video.play();
@@ -278,3 +281,12 @@ function videosTable(){
   }
 }
 videosTable();
+document.getElementById("search").onclick = search;
+function search(){
+  var key = document.getElementById("searchInput").value;
+  if(key==""){return;}
+  var a = document.createElement("a");
+  document.body.appendChild(a);
+  a.href = "../search.html?"+key;
+  a.click();
+}
