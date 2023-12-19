@@ -329,9 +329,13 @@
         var recitationDiv=document.createElement("recitationDiv");
         content = this.parentNode.innerHTML;
         recitationDiv.innerHTML="<div onclick='record(this)'>录制</div>\
-        <p onclick='this.parentElement.remove()' style='position: absolute;top:50px;right:30px;cursor: pointer;'>退出</p>";
+        <p onclick='left(this)' style='position: absolute;top:50px;right:30px;cursor: pointer;'>退出</p>";
         document.getElementsByClassName("knowledge")[0].appendChild(recitationDiv);
       });
+    }
+    function left(e){
+      e.parentElement.remove();
+      record();
     }
     
     var isRecording = "n";
