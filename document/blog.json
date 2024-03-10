@@ -1,0 +1,38 @@
+{
+  "blog1": {
+    "title": "选择CSDN代码/复制无法选中的文字",
+    "url": "//www.kingdinner.top/blog1.html",
+    "writer": "国王的晚餐",
+    "time": "2024/02/25"
+  },
+  "blog2": {
+    "title": "修改以前的代码",
+    "url": "//www.kingdinner.top/blog2.html",
+    "writer": "国王的晚餐",
+    "time": "2024/02/27"
+  },
+  "笑话": {
+    "title": "一则笑话",
+    "url": "//www.kingdinner.top/笑话.html",
+    "writer": "国王的晚餐",
+    "time": "2024/02/28"
+  },
+  "笑话2": {
+    "title": "一则笑话2",
+    "url": "//www.kingdinner.top/笑话2.html",
+    "writer": "国王的晚餐",
+    "time": "2024/02/29"
+  },
+  "笑话3": {
+    "title": "令人啼笑皆非的故事",
+    "url": "//www.kingdinner.top/笑话2.html",
+    "writer": "国王的晚餐",
+    "time": "2024/03/02"
+  },
+  "blog3": {
+    "title": "如何免费搭建一个个人网站",
+    "url": "//www.kingdinner.top/blog3.html",
+    "writer": "国王的晚餐",
+    "time": "2024/03/10"
+  }
+}
