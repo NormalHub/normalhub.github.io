@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>博客</title>
+  <link rel="icon" href="./imgs/xie.png">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" type="text/css" href="./css/blog.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+</head>
+<body>   
+  <div class="toubulan">
+    <div class="tbl"><a href="./index.html">首页</a></div>
+    <input class="sousuokuang" id="searchInput"/>
+    <div class="tbl" id="search">搜索</div>
+  </div>
+  <div class="centre">
+    <div class="main">
+      <div id="title">修改以前的代码</div>
+      <div id="time">2024/02/27</div>
+      <div id="writer">国王的晚餐</div>
+      <div id="content">
+        当今天的我回过头去改过去写的代码。
+        我发现：那些代码是多么的繁冗、啰嗦。于是我把重复的代码删掉了不少，写成了一个个可以重复调用的函数。
+        这让我回想起网站的UI变化：2021年，我刚接触HTML和CSS，对它们一窍不通，写出的页面是灰白黑色的，十分难看。随着审美水平提升和对编码语言掌握的熟练，我把所有页面的UI改过三四次，才有了今天让我满意的页面。
+        人也是这样。所以不要因为事情开头的困难而放弃，万事开头难，练得多了，学得多了，问题自然而然地就解决了。
+        以后的我还可能会觉得今天的UI或代码不够好，还会再修改这些现在让我很满意的东西。
+      </div>
+    </div>
+    <div class="side">
+      <div class="discussion">
+        <div class="discuss"></div>
+        评论加载中 <i class="fa fa-spinner fa-pulse"></i>
+      </div>
+      <div class="recommendation"></div>
+    </div>
+  </div>
+  <script type="module" src="./js/blog.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>几何画板</title>
+
+    <style>
+      html,body{
+        width: 100%;
+        height: 100%;
+      }
+      canvas{
+        width: 80%;
+        height: 80%;
+        border: #000 solid;
+      }
+      #a{
+        position: absolute;
+        background: #000;
+      }
+    </style>
+</head>
+<body>
+  <canvas class="div"></canvas>
+  <div id="a"></div>
+<script>
+var a = document.getElementById("a");
+var divs = document.getElementsByClassName("div");
+document.body.onmousedown = function(){
+  var startX = event.pageX;
+  var startY = event.pageY;
+  a.style.left = startX + "px";
+  a.style.top = startY + "px";
+  console.log(1)
+  document.body.onmousemove = function(){
+    var finishX = event.pageX;
+    var finishY = event.pageY;
+    a.style.height = finishY-startY + "px";
+    a.style.width = finishX-startX + "px";
+  }
+  document.body.onmouseup = function(){
+    a.style.height = 0;
+    a.style.width = 0;
+    document.body.onmousemove = null;
+    document.body.onmouseup = null;
+  }
+}
+</script>
+</body>
+
+</html>
