@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="keywords" id="pagekeywords">
+  <meta name="description" content="选择一个视频才能播放哦">
+  <title id="pageTitle">视频播放</title>
+  <link rel="icon" href="../imgs/xie.png">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" type="text/css" href="../css/video.css"/>
+</head>
+<body>
+  <div class="toubulan">
+    <div class="tbl"><a href="../index.html">首页</a></div>
+    <input class="sousuokuang" id="searchInput"/>
+    <div class="tbl" id="search">搜索</div>
+  </div>
+  <div class="left">
+    <div id="title">请选择视频观看</div>
+    <div id="opusTime">__ / __ / __</div>
+    <div id="VideoPlayer">
+      <video id="video" ondblclick="RequestFullscreen()" onclick="PlayOrPause()"></video> 
+      <div id="bottom">
+        <div id="ProgressBarOuter"><div id="ProgressBar"></div></div>
+        <div id="play" onclick="PlayOrPause()"></div>
+        <p id="progressNumber">0:00/00:00</p>
+        <div id="fullscreen" onclick="RequestFullscreen()"></div>
+        <div class="setting" title="待开发"></div>
+        <div class="speed" onmouseenter="Speed()"><p id="speed">倍速</p></div>
+        <div class="volume" onmouseenter="Volume()"></div>
+      </div>
+      <div onmouseleave="Volume()" id="volume"><div id="volumeBar"></div></div>
+      <div id="volumeOuter"><p id="volumeNumber">100%</p></div>
+      <div id="speedMenu" onmouseleave="Speed()">
+        <div onclick="speedChoices(this)">2</div><div onclick="speedChoices(this)">1.5</div>
+        <div onclick="speedChoices(this)">1.25</div><div onclick="speedChoices(this)">1</div>
+        <div onclick="speedChoices(this)">0.5</div>
+      </div>
+    </div>
+    <div id="introduction">________</div>
+    <div id="discussions">
+      <div class="discuss">
+        <div class="discussionContent">
+          <textarea id="discussContent" placeholder="你的评论是对我最大的激励!" maxlength="250"></textarea>
+          <div class="emoticon"></div><div id="emoticon"></div>
+        </div>
+        <div id="send">发送</div>
+      </div>
+    </div>
+  </div>
+  <div class="right" id="videoTable"></div>
+  <script type="module" src="../js/discuss.js"></script>
+  <script type="text/javascript" src="../js/VideoPlayer.js"></script>
+</body>
+</html>
