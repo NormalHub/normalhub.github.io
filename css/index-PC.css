@@ -1,0 +1,310 @@
+html,body{
+  width:100%;
+  height:100%;
+  background:#f1f8fa;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0px;
+}
+.waiting{
+  position: fixed;
+  margin: auto;
+  top: 20px;
+  left: 10px;
+  background: #252c34;
+  color: #fff;
+  transition: 1.5s;
+  border-radius: 5px;
+  padding: 4px 10px;
+  z-index: 10;
+}
+.tbl{
+  height: 100%;
+  width: 88px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 60px;
+  cursor: pointer;
+}
+.tbl:hover{
+  text-decoration: underline #222b2c;
+}
+.toubulan{
+  width:100%;
+  height:60px;
+  background:#fff;
+  position: fixed;
+  top: 0px;
+  z-index: 10;
+  display: flex;
+}
+.sousuokuang{
+  width:100px;
+  height:30px;
+  margin: auto 0;
+  padding: 0px 10px;
+  font-size: 15px;
+  transition: 0.3s;
+  float: left;
+  border: 0px;
+  background-color: #ededed;
+}
+.sousuokuang:focus{
+  width:200px;
+  border: 0px;
+  outline: 0px;
+}
+.tianchong{
+  height:65px;
+  width:100%;
+}
+.juzhong{
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+a{
+  text-decoration:none;
+  color:black;
+}
+.opu{
+  width: 100%;
+  height: 100%;
+}
+.box{
+  width: 320px;
+  height: 80px;
+  padding: 5px;
+  margin-top: 10px;
+  background: #fff;
+  display: block;
+  border-radius: 5px;
+}
+.box:hover{
+  border: #000 1px solid;
+}
+.box .title{
+  line-height: 30px;
+}
+.postings{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+}
+.publishingPost textarea:focus{
+  outline: 0;
+}
+.publishingPost textarea{
+  width: 100%;
+  margin-top: 10px;
+  background: #f6f6f6;
+  font-size: 16px;
+  height: 300px;
+  border: 0;
+}
+.publishingPost p{
+  width: 32px;
+  color: #000;
+  padding: 5px;
+  cursor: pointer;
+  background: #eeeeee;
+  display: inline-block;
+}
+.add{
+  color: #000;
+  margin: 2.5px;
+  cursor: pointer;
+  display: inline-block;
+}
+.add:nth-child(4)::after{
+  content: "（选中文本后点击)";
+}
+.add:hover{
+  text-decoration: underline #000;
+}
+.example{
+  line-height: 20px;
+  width: 50%;
+  float: left;
+  margin-top: 10px;
+}
+.postingdiv{
+  margin-top: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  color: #2c2c2c;
+  width: 320px;
+  background: #fff;
+  border-radius: 10px;
+  display: flex;
+}
+.postingDivContent{
+  flex: 1;
+}
+.postingDivContent div:first-of-type::before{
+  content: "内容：";
+}
+.postingDivContent :nth-child(2)::before{
+  content: "时间：";
+}
+.postingDivContent :nth-child(3)::before{
+  content: "发帖人：";
+}
+.fa-thumbs-o-up,.fa-thumbs-up{
+  width: 32px;
+}
+.fa-thumbs-o-up::before,.fa-thumbs-up::before{
+  content: "\f087";
+  line-height: 62px;
+  font-size: 20px;
+}
+.postingdiv a{
+  color: #2ca9eb;
+  text-decoration:underline #2ca9eb;
+}
+.postingsButton{
+  cursor: pointer;
+  width: 65px;
+  background: #27bae7;
+  padding: 5px;
+  color: #fff;
+}
+#postings{
+  flex: 1;
+}
+#postingsMessage,.publishingPost{
+  width: 600px;
+  height: 90%;
+  background: #fff;
+  padding: 0 10px;
+  color: #767676;
+  line-height: 10px;
+}
+#postingsMessage a{
+  color: #2ca9eb;
+  text-decoration:underline #2ca9eb;
+}
+#postingsMessage p{
+  color: #222b2c;
+  line-height: 20px;
+}
+#postBg,.publishingPostBg{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  display: none;
+  top: 0;
+  z-index: 10;
+  justify-content: center;
+  align-items: end;
+  background: #00000080;
+}
+#postBg .discuss{
+  width: 600px;
+  height: 60px;
+  background: #fff;
+  position: absolute;
+  border-top: #000 1px solid;
+  bottom: 10px;
+  display: flex;
+}
+#postBg .discuss textarea{
+  width: 90%;
+  height: 60px;
+  padding: 0;
+  border: 0px;
+  resize:none;
+  font-size: 17px;
+}
+#postBg .discuss textarea:focus{
+  border: 0px;
+  outline: 0px;
+}
+#postBg .discuss div{
+  flex: 1;
+  background: #27bae7;
+  color: #fff;
+  line-height: 60px;
+  text-align: center;
+  cursor: pointer;
+}
+.buttomdiv{
+  width: 100%;
+  height: 60px;
+  background: #2c2c2c;
+  font-size: 18px;
+  color: #fff;
+  text-align: center;
+}
+.buttomdiv a{
+  color: #fff;
+  text-decoration: underline #fff;
+}
+::-webkit-scrollbar{width:0px;}
+.emoticon{
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  font-size: 25px;
+  filter: grayscale(100%) contrast(180%) brightness(85%);
+  cursor: pointer;
+}
+#emoticon{
+  width: 320px;
+  height: 220px;
+  padding: 15px;
+  background-color: #ecf2f9;
+  border-radius: 5px;
+  box-shadow: #a5a4a4 0px 5px 10px;
+  position: absolute;
+  right: -20px;
+  bottom: 40px;
+  display: none;
+}
+.emoticonImgInDiscussion{
+  width: 30px;
+  height: 30px;
+  margin: 0px 2px;
+  background-size: 150px auto;
+  background-image: url("../imgs/emoticon.png");
+}
+.emoticonImg:hover{
+  background-color: #cdcdcd;
+}
+.emoticonImg{
+  width: 35px;
+  height: 35px;
+  margin: 2.5px;
+  background-size: 175px auto;
+  background-image: url("../imgs/emoticon.png");
+  float: left;
+}
+.blog{
+  width: 100%;
+  height: 100%;
+}
+
+@media screen and (max-width: 600px){
+.tbl{
+  width: 60px;
+  font-size: 17px;
+}
+.sousuokuang:focus{
+  width: 100px;
+}
+.box{
+  border-radius: 0;
+}
+#postingsMessage{
+  width: 100%;
+}
+#postBg .discuss,.publishingPostBg,.publishingPost{
+  width: 100%;
+}
+}

@@ -1,0 +1,231 @@
+html,body{
+  width:100%;
+  height:100%;
+  background:#f3f6f9;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0px;
+  align-content: flex-start;
+}
+.tip{
+  position: fixed;
+  top: 20px;
+  left: 10px;
+  background: #252c34;
+  color: #fff;
+  transition: 1.5s;
+  padding: 5px;
+  z-index: 10;
+}
+.tbl{
+  width: 88px;
+  text-align: center;
+  font-size: 18px;
+  cursor: pointer;
+}
+.tbl:hover{
+  text-decoration: underline #222b2c;
+}
+.toubulan{
+  width:100%;
+  height:60px;
+  background:#fff;
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #d6dbe3;
+}
+.sousuokuang{
+  width:100px;
+  height:30px;
+  margin: auto 0;
+  padding: 0px 10px;
+  font-size: 15px;
+  transition: 0.3s;
+  float: left;
+  border: 0px;
+  background-color: #ededed;
+}
+.sousuokuang:focus{
+  width:200px;
+  border: 0px;
+  outline: 0px;
+}
+.tianchong{
+  height:65px;
+  width:100%;
+}
+.centre{
+  width: 75%;
+  min-width: 580px;
+  min-height: 100%;
+  display: flex;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(55,99,170,.06);
+  padding: 10px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+.main{
+  flex: 1;
+  min-height: 100%;
+}
+#title{
+  font-size: 24px;
+  margin: 10px 0;
+}
+#time,#writer{
+  font-size: 13px;
+  color: #4b5b76;
+  display: inline-block;
+  margin-right: 10px;
+}
+#time::before{content: "发布于：";}
+#writer::before{content: "作者：";}
+#content{
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: #d6dbe3 1px solid;
+  font-size: 15px;
+  line-height: 25px;
+}
+#content a{
+  color: #2ca9eb;
+  text-decoration:underline #2ca9eb;
+}
+.side{
+  border-left: #d6dbe3 1px solid;
+  width: 22%;
+  padding-left: 10px;
+  min-width: 150px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.recommendation,.discussion{
+  flex: 1;
+  color: #333;
+}
+.discuss{
+  text-align: center;
+  background: #27bae7;
+  padding: 5px;
+  color: #fff;
+  cursor: pointer;
+}
+.discuss::before{
+  content: "评论";
+}
+a{
+  text-decoration:none;
+  color:black;
+}
+.opu{
+  width: 100%;
+  height: 100%;
+}
+.box{
+  width: 320px;
+  height: 80px;
+  padding: 5px;
+  margin-top: 10px;
+  background: #fff;
+  display: block;
+  border-radius: 5px;
+}
+.box:hover{
+  border: #000 1px solid;
+}
+.box .title{
+  line-height: 30px;
+}
+.buttomdiv{
+  width: 100%;
+  height: 60px;
+  background: #2c2c2c;
+  font-size: 18px;
+  color: #fff;
+  text-align: center;
+}
+.buttomdiv a{
+  color: #fff;
+  text-decoration: underline #fff;
+}
+::-webkit-scrollbar{width:0px;}
+.emoticon-icon{
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  font-size: 25px;
+  cursor: pointer;
+}
+#emoticon{
+  width: 320px;
+  height: 220px;
+  padding: 15px;
+  background-color: #ecf2f9;
+  border-radius: 5px;
+  box-shadow: #a5a4a4 0px 5px 10px;
+  position: absolute;
+  right: -20px;
+  bottom: 40px;
+  display: none;
+}
+.emoticonImgInDiscussion{
+  width: 30px;
+  height: 30px;
+  margin: 0px 2px;
+  background-size: 150px auto;
+  background-image: url("../imgs/emoticon.png");
+}
+.emoticonImg:hover{
+  background-color: #cdcdcd;
+}
+.emoticonImg{
+  width: 35px;
+  height: 35px;
+  margin: 2.5px;
+  background-size: 175px auto;
+  background-image: url("../imgs/emoticon.png");
+  float: left;
+}
+.blog{
+  width: 100%;
+  height: 100%;
+}
+
+@media screen and (max-width: 600px){
+.tbl{
+  width: 60px;
+  font-size: 17px;
+}
+.sousuokuang:focus{
+  width: 100px;
+}
+.centre{
+  width: 100%;
+  min-width: 100px;
+}
+.box{
+  border-radius: 0;
+}
+#title{
+  font-size: 20px;
+}
+#time,#writer{
+  font-size: 12px;
+}
+#content{
+  font-size: 14px;
+}
+.side{
+  width: 100%;
+}
+.recommendation,.discussion{
+  background: none;
+}
+}
