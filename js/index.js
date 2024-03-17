@@ -2,7 +2,7 @@ import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
 var SupabaseUrl = "https://kzicffnuaniysdkenbes.supabase.co";
 var SupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6aWNmZm51YW5peXNka2VuYmVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDg2OTAwMzIsImV4cCI6MjAyNDI2NjAzMn0.Exr237hk8hYlEjP1ZvNigWSPGAe9ThIrQAiP9-WftFg";
 const supabase = createClient(SupabaseUrl, SupabaseKey);
-import {markdownToHTML} from "./markdown.js";
+import {convertToHTML} from "./markdown.js";
 
 //重复调用的函数
 function getUserName(){
@@ -78,9 +78,7 @@ function getBlog(){
   xmlhttp.onreadystatechange = function(){
     if (xmlhttp.readyState==4 && xmlhttp.status==200){
       var list = JSON.parse(this.responseText);
-      for(var x in list){
-        creatBlog(list[x].title,list[x].writer,list[x].url,list[x].time);
-      }
+      for(var x in list){creatBlog(list[x].title,list[x].writer,list[x].url,list[x].time);}
     }
   }
   xmlhttp.open("GET","./document/blog.json",true);
@@ -132,7 +130,7 @@ async function getPostings(){
     var postingDiv = document.createElement("div");
     postingDiv.classList.add("postingdiv");
     postingDiv.id = time;
-    postingDiv.innerHTML = "<div class='postingDivContent'><div>"+markdownToHTML(content)+"</div><div>"+date+"</div><div>"+sender+"</div></div><div class='fa fa-thumbs-o-up'>"+data[i].like+"</div>";
+    postingDiv.innerHTML = "<div class='postingDivContent'><div>"+convertToHTML(content)+"</div><div>"+date+"</div><div>"+sender+"</div></div><div class='fa fa-thumbs-o-up'>"+data[i].like+"</div>";
     postings.appendChild(postingDiv);
     document.getElementsByClassName("fa-thumbs-o-up")[document.getElementsByClassName("fa-thumbs-o-up").length-1].id = data[i].like;
     postingDiv.onclick = function(){
@@ -187,7 +185,7 @@ async function postingsMessage(time,content,date,sender){
   for(var t=data.length;t--;t>0){
     if(data[t].time.indexOf("follow"+time)!=-1){
       var element = document.createElement("div");
-      element.innerHTML = "<p>"+data[t].sender+"："+markdownToHTML(data[t].content)+"</p>";
+      element.innerHTML = "<p>"+data[t].sender+"："+convertToHTML(data[t].content)+"</p>";
       postMessageDom.appendChild(element);
     }
   }
@@ -231,16 +229,17 @@ addDoms[2].onclick = function(){
   var link = prompt('请输入链接地址：');
   postContent.value = postContent.value.substring(0, postContent.selectionStart) + `[${selectedText}](${link})` + postContent.value.substring(postContent.selectionEnd);
 }
-var text = `支持markdown语法：<br>
+const text = `
 # 标题<br>
 ## 副标题<br>
-**加粗**<br>
+**粗体**<br>
 *斜体*<br>
-- 列表<br>
-[链接](网址)<br>
-一段话<br>`;
+- 列表项<br>
+[一条链接](//kingdinner.top)<br>
+\`\`\`console.log('这是一个代码块')\`\`\`<br>
+这是一个普通段落。`;
 document.getElementsByClassName("example")[0].innerHTML = text;
-document.getElementsByClassName("example")[1].innerHTML = markdownToHTML(text);
+document.getElementsByClassName("example")[1].innerHTML = convertToHTML(text);
 //评论
 document.getElementsByClassName("discuss")[0].children[1].onclick = async function(){
   var user = getUserName();
