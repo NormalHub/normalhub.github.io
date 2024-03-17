@@ -1,38 +1,44 @@
 {
-  "blog1": {
+  "1.html": {
     "title": "选择CSDN代码/复制无法选中的文字",
-    "url": "//www.kingdinner.top/blog1.html",
+    "url": "//www.kingdinner.top/blog/1.html",
     "writer": "国王的晚餐",
-    "time": "2024/02/25"
+    "time": "2024/02/25",
+    "content": "edge的网页选择是非常实用的一个工具。但微软在2023年9月将“网页选择”工具设置为过时。所以不能再随心所欲地复制CSDN中的代码了（以及各网站中onselectstart=\"return false\"的元素）。\n对此我们有两种方法来解决。\n**方法一：在浏览器地址栏前加“read:”**\n这个方法方便简单，适用于所有客户端。\n**方法二：使用插件**\n这里推荐一个叫[SuperCopy](https://www.crx4chrome.com/crx/204437/)的插件（大部分移动端浏览器没有插件功能）"
   },
-  "blog2": {
+  "2.html": {
     "title": "修改以前的代码",
-    "url": "//www.kingdinner.top/blog2.html",
+    "url": "//www.kingdinner.top/blog/2.html",
     "writer": "国王的晚餐",
-    "time": "2024/02/27"
+    "time": "2024/02/27",
+    "content": "当今天的我回过头去改过去写的代码，我才发现：那些代码是多么的繁冗、啰嗦。于是我把重复的代码删掉了不少，写成了一个个可以重复调用的函数。\n这让我回想起网站的UI变化：2021年，我刚接触HTML和CSS，对它们一窍不通，写出的页面是灰白黑色的，十分难看。随着审美水平提升和对编码语言掌握的熟练，我把所有页面的UI改过三四次，才有了今天让我满意的页面。\n人也是这样。所以不要因为事情开头的困难而放弃，万事开头难，练得多了，学得多了，问题自然而然地就解决了。\n以后的我还可能会觉得今天的UI或代码不够好，还会再修改这些现在让我很满意的东西。"
   },
-  "笑话": {
+  "3.html": {
     "title": "一则笑话",
-    "url": "//www.kingdinner.top/笑话.html",
+    "url": "//www.kingdinner.top/blog/3.html",
     "writer": "国王的晚餐",
-    "time": "2024/02/28"
+    "time": "2024/02/28",
+    "content": "I told my wife she should **embrace** her mistakes. She gave me a hug.\n笑点解析：*embrace*既可以表示“拥抱”，也可以表示“接受”。妻子把丈夫的话理解为拥抱她的错误，而不是接受她的错误。"
   },
-  "笑话2": {
+  "4.html": {
     "title": "一则笑话2",
-    "url": "//www.kingdinner.top/笑话2.html",
+    "url": "//www.kingdinner.top/blog/4.html",
     "writer": "国王的晚餐",
-    "time": "2024/02/29"
+    "time": "2024/02/29",
+    "content": "before crowbar was invented,crows durnk at home.\n笑点解析：*crowbar*意为“撬棍”，拆开来意为“乌鸦酒吧”。"
   },
-  "笑话3": {
-    "title": "令人啼笑皆非的故事",
-    "url": "//www.kingdinner.top/笑话2.html",
-    "writer": "国王的晚餐",
-    "time": "2024/03/02"
-  },
-  "blog3": {
+  "5.html": {
     "title": "如何免费搭建一个个人网站",
-    "url": "//www.kingdinner.top/blog3.html",
+    "url": "//www.kingdinner.top/blog/6.html",
     "writer": "国王的晚餐",
-    "time": "2024/03/10"
+    "time": "2024/03/10",
+    "content": "## 有一定的HTML编程基础\n在搭建一个网站之前要至少要会**HTML,CSS,JS**中的前两个。\n## 发布\n要想让人们访问到您的网站，您必须有一个公网IP和一个服务器。很不幸，这两样东西都不是免费的。\n但是，我们可以通过免费的网站托管服务（如：GitHubPage）来发布网站，其实免费的网站托管服务有很多，但在国内都不能访问（原因你懂的）。\n###GitHubPage使用\n首先我们要注册一个[GitHub](//github.com)账号。\n接着点击右上角头像，找到Your Repositor后点击，再点绿色的按钮New。\n新页面里Repository name填“你用户名”+github.io，然后直接点Create repositor。\n然后会跳转到你的储存库页面，点击Add file，将你的网站文件上传。\n等几分钟后，在浏览器地址栏中输入“你用户名+github.io”（也就是储存库名字）就可以访问了。"
+  },
+  "6.html": {
+    "title": "骑行",
+    "url": "//www.kingdinner.top/blog/",
+    "writer": "国王的晚餐",
+    "time": "2024/03/17",
+    "content": "我爱冬天的雪，高洁、冷清、美丽。\n早上八点开始骑行。天很暗，雪刚刚开始下。沥青路上好像铺了一层白色糖霜，车轮碾过，一道有花纹的黑色显出。\n路过某公园，雪大概有了一厘米。我的目的地不是它，穿过公路，骑在仅能一辆汽车通过、弯弯绕绕的小路上。路的两边是空旷的田野，一个个田埂像脊柱一样隆起，将田野整齐地分成了一块又一块。\n雪越下越大，我靠边停下车休息，刚下的雪很松软，骑起来很费劲。我蹲下，捧起一满怀的雪，张开双臂。雪纷纷散开，落下，像纱，像瀑布。\n十点，雪停。我到了近郊，这里大货车把雪压得很实，很省力，可惜上面有很多颜色深浅不一的泥印，让雪丧失了美感，多了分凌乱。我走进一家饭店吃饭，热气腾腾，融掉了脖间没抖掉的雪。\n吃完，雪又开始下。我不打算原路返回，却在途中迷了路，举目四望，全是白茫茫的一片。田间小路是网状的，我左拐右拐，终于到了一个村庄。那里雪有十分米，我不得不推车前进。村庄，田野，公路，县城，我终于一步一步地走回了家。"
   }
 }
