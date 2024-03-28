@@ -127,7 +127,7 @@ a{
   text-decoration: underline #000;
 }
 .example{
-  line-height: 20px;
+  line-height: 16px;
   width: 50%;
   float: left;
   margin-top: 10px;
@@ -144,6 +144,9 @@ a{
 }
 .postingDivContent{
   flex: 1;
+}
+.postingDivContent p{
+  display: inline;
 }
 .postingDivContent div:first-of-type::before{
   content: "内容：";
@@ -188,9 +191,13 @@ a{
   color: #2ca9eb;
   text-decoration:underline #2ca9eb;
 }
+#postingsMessage :nth-child(1) p{
+  display: block;
+}
 #postingsMessage p{
   color: #222b2c;
   line-height: 20px;
+  display: inline;
 }
 #postBg,.publishingPostBg{
   width: 100%;
@@ -244,7 +251,7 @@ a{
   color: #fff;
   text-decoration: underline #fff;
 }
-::-webkit-scrollbar{width:0px;}
+body::-webkit-scrollbar{width:0px;}
 .emoticon{
   width: 25px;
   height: 25px;
@@ -293,7 +300,10 @@ a{
 @media screen and (max-width: 600px){
 .tbl{
   width: 60px;
-  font-size: 17px;
+  font-size: 14px;
+}
+body{
+  font-size: 14px;
 }
 .sousuokuang:focus{
   width: 100px;
