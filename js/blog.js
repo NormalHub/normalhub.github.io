@@ -1,6 +1,6 @@
-import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
-var SupabaseUrl = "https://kzicffnuaniysdkenbes.supabase.co";
-var SupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6aWNmZm51YW5peXNka2VuYmVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDg2OTAwMzIsImV4cCI6MjAyNDI2NjAzMn0.Exr237hk8hYlEjP1ZvNigWSPGAe9ThIrQAiP9-WftFg";
+import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+var SupabaseUrl = "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com";
+var SupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImV4cCI6MzI4ODM0Njc1NywiaWF0IjoxNzExNTQ2NzU3LCJpc3MiOiJzdXBhYmFzZSJ9.iee2MqZMWv-d3mRWC0YPdaganE9y58EEcw3xEh4aNk8";
 const supabase = createClient(SupabaseUrl, SupabaseKey);
 import {convertToHTML} from "./markdown.js";
 //全局变量
