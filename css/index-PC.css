@@ -8,55 +8,41 @@ html,body{
 }
 .waiting{
   position: fixed;
-  margin: auto;
   top: 20px;
   left: 10px;
   background: #252c34;
   color: #fff;
   transition: 1.5s;
-  border-radius: 5px;
   padding: 4px 10px;
   z-index: 10;
 }
 .tbl{
   height: 100%;
-  width: 88px;
+  width: 60px;
   text-align: center;
-  font-size: 18px;
   line-height: 60px;
   cursor: pointer;
 }
-.tbl:hover{
-  text-decoration: underline #222b2c;
-}
+.tbl:hover{text-decoration: underline #222b2c;}
 .toubulan{
   width:100%;
-  height:60px;
   background:#fff;
-  position: fixed;
+  position: sticky;
   top: 0px;
-  z-index: 10;
   display: flex;
 }
 .sousuokuang{
   width:100px;
-  height:30px;
+  line-height:30px;
   margin: auto 0;
   padding: 0px 10px;
-  font-size: 15px;
   transition: 0.3s;
-  float: left;
   border: 0px;
   background-color: #ededed;
 }
 .sousuokuang:focus{
   width:200px;
-  border: 0px;
   outline: 0px;
-}
-.tianchong{
-  height:65px;
-  width:100%;
 }
 .juzhong{
   width: 100%;
@@ -76,7 +62,6 @@ a{
 .box{
   width: 320px;
   height: 80px;
-  padding: 5px;
   margin-top: 10px;
   background: #fff;
   display: block;
@@ -89,10 +74,8 @@ a{
   line-height: 30px;
 }
 .postings{
-  display: flex;
   width: 100%;
   height: 100%;
-  flex-direction: column;
   overflow: hidden;
 }
 .publishingPost textarea:focus{
@@ -107,11 +90,8 @@ a{
   border: 0;
 }
 .publishingPost p{
-  width: 32px;
   color: #000;
-  padding: 5px;
   cursor: pointer;
-  background: #eeeeee;
   display: inline-block;
 }
 .add{
@@ -139,7 +119,7 @@ a{
   color: #2c2c2c;
   width: 320px;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 5px;
   display: flex;
 }
 .postingDivContent{
@@ -148,15 +128,9 @@ a{
 .postingDivContent p{
   display: inline;
 }
-.postingDivContent div:first-of-type::before{
-  content: "内容：";
-}
-.postingDivContent :nth-child(2)::before{
-  content: "时间：";
-}
-.postingDivContent :nth-child(3)::before{
-  content: "发帖人：";
-}
+.postingDivContent div:first-of-type::before{content: "内容：";}
+.postingDivContent :nth-child(2)::before{content: "时间：";}
+.postingDivContent :nth-child(3)::before{content: "发帖人：";}
 .fa-thumbs-o-up,.fa-thumbs-up{
   width: 32px;
 }
@@ -225,7 +199,7 @@ a{
   padding: 0;
   border: 0px;
   resize:none;
-  font-size: 17px;
+  font-size: 16px;
 }
 #postBg .discuss textarea:focus{
   border: 0px;
@@ -243,9 +217,7 @@ a{
   width: 100%;
   height: 60px;
   background: #2c2c2c;
-  font-size: 18px;
   color: #fff;
-  text-align: center;
 }
 .buttomdiv a{
   color: #fff;
@@ -301,20 +273,10 @@ body::-webkit-scrollbar{width:0px;}
 .tbl{
   width: 60px;
   font-size: 14px;
+  line-height: 40px;
 }
-body{
-  font-size: 14px;
-}
-.sousuokuang:focus{
-  width: 100px;
-}
-.box{
-  border-radius: 0;
-}
-#postingsMessage{
-  width: 100%;
-}
-#postBg .discuss,.publishingPostBg,.publishingPost{
-  width: 100%;
-}
+.sousuokuang{height: 20px;}
+.sousuokuang:focus{width: 100px;}
+#postingsMessage{width: 100%;}
+#postBg .discuss,.publishingPostBg,.publishingPost{width: 100%;}
 }
