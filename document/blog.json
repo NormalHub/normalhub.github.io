@@ -32,7 +32,7 @@
     "url": "//www.kingdinner.top/blog/5.html",
     "writer": "国王的晚餐",
     "time": "2024/03/10",
-    "content": "## 有一定的HTML编程基础\n在搭建一个网站之前要至少要会**HTML,CSS,JS**中的前两个。\n## 发布\n要想让人们访问到您的网站，您必须有一个公网IP和一个服务器。很不幸，这两样东西都不是免费的。\n但是，我们可以通过免费的网站托管服务（如：GitHubPage）来发布网站，其实免费的网站托管服务有很多，但在国内都不能访问（原因你懂的）。\n###GitHubPage使用\n首先我们要注册一个[GitHub](//github.com)账号。\n接着点击右上角头像，找到Your Repositor后点击，再点绿色的按钮New。\n新页面里Repository name填“你用户名”+github.io，然后直接点Create repositor。\n然后会跳转到你的储存库页面，点击Add file，将你的网站文件上传。\n等几分钟后，在浏览器地址栏中输入“你用户名+github.io”（也就是储存库名字）就可以访问了。"
+    "content": "## 有一定的HTML编程基础\n在搭建一个网站之前要至少要会**HTML,CSS,JS**中的前两个。\n## 发布\n要想让人们访问到您的网站，您必须有一个公网IP和一个服务器。很不幸，这两样东西都不是免费的。\n但是，我们可以通过免费的网站托管服务（如：GitHubPage）来发布网站，其实免费的网站托管服务有很多，但在国内都不能访问（原因你懂的）。\n## GitHubPage使用\n首先我们要注册一个[GitHub](//github.com)账号。\n接着点击右上角头像，找到Your Repositor后点击，再点绿色的按钮New。\n新页面里Repository name填“你用户名”+github.io，然后直接点Create repositor。\n然后会跳转到你的储存库页面，点击Add file，将你的网站文件上传。\n等几分钟后，在浏览器地址栏中输入“你用户名+github.io”（也就是储存库名字）就可以访问了。"
   },
   "6.html": {
     "title": "骑行",
