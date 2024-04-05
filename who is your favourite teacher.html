@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>谁是你最喜欢的老师</title>
+<link rel="icon" href="./imgs/xie.png">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, user-scalable=0">
+<link rel="stylesheet" type="text/css" href="./css/index-PC.css"/>
+<style>body{display:block;text-align:center;}.like,.dislike{float:left;width:calc(50% - 20px);height:calc(100% - 50px);padding: 5px;border: 1px solid #000;margin: 0 4px;}.like p,.dislike p{width: calc(100% - 35px);margin: 5px 5px 0 0;font-size: 24px;color: #fff;background: #9bd0ff;display: inline-block;}.like h2,.dislike h2{display: inline-block;width: 30px;background: #9bd0ff;color: #fff;margin: 0;}.like div,.dislike div{width:100%;margin:5px 0;background: #fff;display: flex;}.like span,.dislike span{flex: 1;padding: 5px;}span:nth-child(1),span:nth-child(3){background: #eee;}.like span:nth-child(2):before{content: "❤";color: red;}.dislike span:nth-child(2):before{content: "💔️";}@media screen and (max-width: 600px){.like,.dislike{margin: 0;border:none;min-height:40%;width:100%;padding: 0;}}</style>
+</head>
+<body>
+<div class="toubulan"><a class="tbl" href="./index.html">首页</a><input class="sousuokuang" id="searchInput"/><div class="tbl" id="search">搜索</div></div><h2>谁是你最喜欢/讨厌的老师？</h2><div class="like"><p>like</p><h2 name="creat">+</h2></div><div class="dislike"><p>dislike</p><h2 name="creat">+</h2></div>
+<div style="width: 100%;" id="ending"></div>
+<script type="module">
+import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+var SupabaseUrl="https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com";
+var SupabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImV4cCI6MzI4ODM0Njc1NywiaWF0IjoxNzExNTQ2NzU3LCJpc3MiOiJzdXBhYmFzZSJ9.iee2MqZMWv-d3mRWC0YPdaganE9y58EEcw3xEh4aNk8";
+const supabase=createClient(SupabaseUrl, SupabaseKey);
+var likeDiv=document.getElementsByClassName("like")[0];
+var dislikeDiv=document.getElementsByClassName("dislike")[0];
+var {data,error}=await supabase.from('teacherLiked').select();
+var discussion=[];
+(function(){for(var t=data.length;t--;t>0){var name=data[t].name;var likes=data[t].likes;discussion.push(data[t].discussion);var box=document.createElement("div");box.innerHTML="<span>"+name+"</span><span name='support'>"+likes+"</span><span name='more' id="+t+">更多∨</span><span name='d'>评论</span>";if(data[t].is_liked){likeDiv.appendChild(box);}else{dislikeDiv.appendChild(box);}}}())
+var support=document.getElementsByName("support");
+var more=document.getElementsByName("more");
+for(var x=support.length;x--;x>0){support[x].onclick=async function(){var {error}=await supabase.from('teacherLiked').update({likes: Number(this.innerHTML)+1}).eq('name',this.previousSibling.innerHTML);this.innerHTML++;};
+more[x].onclick= function(){var d=discussion[discussion.length-1-Number(this.id)];if(this.innerHTML=="收起∧"){this.innerHTML="更多∨";for(var t in d){this.parentNode.nextSibling.remove();}}else{this.innerHTML="收起∧";for(var t in d){this.parentNode.insertAdjacentHTML("afterend","<div style='width:calc(100% - 10px);padding:5px'>"+d[t]+"</div>");}}}}
+function check(v){var notNull = /[^ ]/g;if(v==""||v==null||!notNull.test(v)||v=="null"){return false;}else{return v;}}
+async function creat(isLike){alert("建议不要直接写老师姓名，而是“XX班XX学科老师”;评论要注意文明用语");var name=check(prompt("哪个老师？（1/2）",""));if(!name){return;}var discuss=check(prompt("评论（2/2）",""));if(!discuss){return;}var {error}=await supabase.from('teacherLiked').insert({name:name,discussion:{"0":discuss},is_liked:isLike});var box=document.createElement("div");box.innerHTML="<span>"+name+"</span><span name='support'>1</span><span name='more' id="+t+">更多∨</span><span name='d'>评论</span>";if(isLike){likeDiv.appendChild(box);}else{dislikeDiv.appendChild(box);}}
+document.getElementsByName("creat")[0].onclick=function(){creat(true);};document.getElementsByName("creat")[1].onclick=function(){creat(false);}
+var dDom= document.getElementsByName("d");
+for(var t=dDom.length;t--;t>0){dDom[t].onclick=async function(){alert("评论要注意文明用语");var c=check(prompt("评论",""));if(!c){return;}var d=discussion[discussion.length-1-Number(this.previousSibling.id)];function getlength(){var l=0;for(var x in d){l++;};return l;}d[getlength()]=c;var {error}=await supabase.from('teacherLiked').update({discussion:d}).eq('name',this.parentNode.children[0].innerHTML);}}
+</script>
+<script>document.getElementById("ending").innerHTML="注意：本页面不会记录任何使用者信息，你是匿名的！<br>最后修改时间："+document.lastModified;</script>
+</body>
+</html>
