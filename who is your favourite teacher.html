@@ -12,7 +12,7 @@
 <div class="toubulan"><a class="tbl" href="./index.html">首页</a><input class="sousuokuang" id="searchInput"/><div class="tbl" id="search">搜索</div></div><h2>谁是你最喜欢/讨厌的老师？</h2><div class="like"><p>like</p><h2 name="creat">+</h2></div><div class="dislike"><p>dislike</p><h2 name="creat">+</h2></div>
 <div style="width: 100%;" id="ending"></div>
 <script type="module">
-import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+import {createClient} from 'https://unpkg.com/@supabase/supabase-js@2.42.4/dist/umd/supabase.js';
 var SupabaseUrl="https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com";
 var SupabaseKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImV4cCI6MzI4ODM0Njc1NywiaWF0IjoxNzExNTQ2NzU3LCJpc3MiOiJzdXBhYmFzZSJ9.iee2MqZMWv-d3mRWC0YPdaganE9y58EEcw3xEh4aNk8";
 const supabase=createClient(SupabaseUrl, SupabaseKey);
