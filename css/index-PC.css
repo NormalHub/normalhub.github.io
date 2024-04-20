@@ -16,12 +16,28 @@ html,body{
   padding: 4px 10px;
   z-index: 10;
 }
+.bg{
+  background: #00000080;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+}
+.frontDiv{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:#f1f8fa;
+}
 .tbl{
   height: 100%;
-  width: 60px;
+  width: fit-content;
   text-align: center;
   line-height: 60px;
+  min-width: 60px;
   cursor: pointer;
+  margin-left: 5px;
 }
 .tbl:hover{text-decoration: underline #222b2c;}
 .toubulan{
@@ -30,6 +46,7 @@ html,body{
   position: sticky;
   top: 0px;
   display: flex;
+  box-shadow: 0 2px 4px 0 #00000014;
 }
 .sousuokuang{
   width:100px;
@@ -44,21 +61,9 @@ html,body{
   width:200px;
   outline: 0px;
 }
-.juzhong{
-  width: 100%;
-  min-height: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  overflow: hidden;
-}
 a{
   text-decoration:none;
   color:black;
-}
-.opu{
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
 }
 .box{
   width: 320px;
@@ -74,47 +79,39 @@ a{
 .box .title{
   line-height: 30px;
 }
-.postings{
+.postings,.video,.blog{
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  display: none;
 }
-.publishingPost textarea:focus{
-  outline: 0;
+.publishingPost,#postBg{
+  flex: 1;
+  background: #fff;
 }
 .publishingPost textarea{
-  width: 100%;
-  margin-top: 10px;
+  width: calc(100% - 5px);
   background: #f6f6f6;
   font-size: 16px;
   height: 300px;
   border: 0;
+  resize:none;
 }
-.publishingPost p{
+.publishingPost div{
+  margin: 8px;
   color: #000;
+}
+#send{
   cursor: pointer;
-  display: inline-block;
-}
-.add{
-  color: #000;
-  margin: 2.5px;
-  cursor: pointer;
-  display: inline-block;
-}
-.add:nth-child(4)::after{
-  content: "（选中文本后点击)";
-}
-.add:hover{
+  float: right;
+  width: fit-content;
   text-decoration: underline #000;
 }
-.example{
-  line-height: 16px;
-  width: 50%;
-  float: left;
-  margin-top: 10px;
+.add{
+  display: inline-block;
+  cursor: pointer;
 }
 .postingdiv{
-  margin-top: 10px;
+  margin: 6px;
   padding: 5px 10px;
   cursor: pointer;
   color: #2c2c2c;
@@ -129,9 +126,9 @@ a{
 .postingDivContent p{
   display: inline;
 }
-.postingDivContent div:first-of-type::before{content: "内容：";}
-.postingDivContent :nth-child(2)::before{content: "时间：";}
-.postingDivContent :nth-child(3)::before{content: "发帖人：";}
+.postingDivContent div:first-of-type::before{content: "content：";}
+.postingDivContent :nth-child(2)::before{content: "time：";}
+.postingDivContent :nth-child(3)::before{content: "poster：";}
 .fa-thumbs-o-up,.fa-thumbs-up{
   width: 32px;
 }
@@ -144,21 +141,19 @@ a{
   color: #2ca9eb;
   text-decoration:underline #2ca9eb;
 }
-.postingsButton{
-  cursor: pointer;
-  width: 65px;
-  background: #27bae7;
-  padding: 5px;
-  color: #fff;
-}
 #postings{
-  flex: 1;
+  min-width: 352px;
+  height: 100%;
+  overflow: clip auto;
 }
-#postingsMessage,.publishingPost{
+#postings::-webkit-scrollbar,.recommendation::-webkit-scrollbar{width:6px;background: #f5f5f5;}
+#postings::-webkit-scrollbar-thumb,.recommendation::-webkit-scrollbar-thumb{background: #48d4ff;}
+#postings::-webkit-scrollbar-thumb:hover,.recommendation::-webkit-scrollbar-thumb:hover{background: #27bae7;}
+#postingsMessage{
   width: 600px;
   height: 90%;
   background: #fff;
-  padding: 0 10px;
+  padding: 10px;
   color: #767676;
   line-height: 10px;
 }
@@ -174,24 +169,12 @@ a{
   line-height: 20px;
   display: inline;
 }
-#postBg,.publishingPostBg{
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  display: none;
-  top: 0;
-  z-index: 10;
-  justify-content: center;
-  align-items: end;
-  background: #00000080;
-}
 #postBg .discuss{
   width: 600px;
   height: 60px;
-  background: #fff;
   position: absolute;
   border-top: #000 1px solid;
-  bottom: 10px;
+  bottom: 0px;
   display: flex;
 }
 #postBg .discuss textarea{
@@ -202,7 +185,7 @@ a{
   resize:none;
   font-size: 16px;
 }
-#postBg .discuss textarea:focus{
+textarea:focus{
   border: 0px;
   outline: 0px;
 }
@@ -219,65 +202,25 @@ a{
   height: 60px;
   background: #2c2c2c;
   color: #fff;
+  text-align: center;
 }
 .buttomdiv a{
   color: #fff;
   text-decoration: underline #fff;
 }
 body::-webkit-scrollbar{width:0px;}
-.emoticon{
-  width: 25px;
-  height: 25px;
-  position: absolute;
-  bottom: 10px;
-  right: 15px;
-  font-size: 25px;
-  filter: grayscale(100%) contrast(180%) brightness(85%);
-  cursor: pointer;
-}
-#emoticon{
-  width: 320px;
-  height: 220px;
-  padding: 15px;
-  background-color: #ecf2f9;
-  border-radius: 5px;
-  box-shadow: #a5a4a4 0px 5px 10px;
-  position: absolute;
-  right: -20px;
-  bottom: 40px;
-  display: none;
-}
-.emoticonImgInDiscussion{
-  width: 30px;
-  height: 30px;
-  margin: 0px 2px;
-  background-size: 150px auto;
-  background-image: url("../imgs/emoticon.png");
-}
-.emoticonImg:hover{
-  background-color: #cdcdcd;
-}
-.emoticonImg{
-  width: 35px;
-  height: 35px;
-  margin: 2.5px;
-  background-size: 175px auto;
-  background-image: url("../imgs/emoticon.png");
-  float: left;
-}
-.blog{
-  width: 100%;
-  height: 100%;
-}
+.postButton{display: none;}
 
 @media screen and (max-width: 600px){
-.tbl{
-  width: 60px;
-  font-size: 14px;
-  line-height: 40px;
-}
+body{font-size: 14px;}
+.tbl{width: 60px;line-height: 40px;}
 .sousuokuang{height: 20px;}
 .sousuokuang:focus{width: 100px;}
 #postingsMessage{width: 100%;}
-#postBg .discuss,.publishingPostBg,.publishingPost{width: 100%;}
+#postBg .discuss{width: 100%;}
+
+.postings{flex-direction: column;height: calc(100% - 40px);}
+.postButton{margin-left: 5px;display: block;cursor: pointer;padding: 5px 10px;width: fit-content;background: #48d4ff;color: #fff;}
+#postings{width: 100%;}
+#postBg,.publishingPost{width: 100%;overflow: hidden;height: 0;position: fixed;bottom: 0;transition: 0.4s;}
 }
