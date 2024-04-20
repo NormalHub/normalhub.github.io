@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="normalHub,正常中心">
-  <title>正常中心</title>
+  <meta name="description" content="normalHub,king's dinner,国王的晚餐">
+  <title>king's dinner</title>
   <link rel="icon" href="./imgs/xie.png">
   <meta name="robots" content="all"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, user-scalable=0">
@@ -12,35 +12,22 @@
 </head>
 <body>
   <div class="toubulan">
-    <div class="tbl" id="tiezi">帖子</div>
-    <div class="tbl" id="shipin">视频</div>
-    <div class="tbl" id="boke">博客</div>
+    <div class="tbl">posting</div>
+    <div class="tbl">blog</div>
+    <div class="tbl">video</div>
     <input class="sousuokuang" id="searchInput"/>
-    <div class="tbl" id="search">搜索</div>
+    <div class="tbl" id="search">search</div>
   </div>
-  <div class="juzhong">
-    <div class="postings">
-      <div class="postingsButton">点我发帖</div>
-      <div class="publishingPostBg">
-        <div class="publishingPost">
-          <textarea id="content"></textarea>
-          <div class="add"><b>加粗</b></div>
-          <div class="add"><i>斜体</i></div>
-          <div class="add">链接</div>
-          <p id="send">发送</p>
-          <div class="example"></div><div class="example"></div>
-        </div>
-      </div>
-      <div id="postings"><p><i class="fa fa-spinner fa-pulse"></i>加载中</p></div>
-      <div id="postBg">
-        <div id="postingsMessage"></div>
-        <div class="discuss"><textarea placeholder="评论（Enter发送）"></textarea><div>发送</div></div>
-      </div>
-    </div>
-    <div class="opu"></div>
-    <div class="blog"></div>
+  <div class="frontDiv">loading...</div>
+  <div class="postings">
+    <div class="postButton">post</div>
+    <div class="publishingPost"><textarea id="postContent"></textarea><div class="add">bold</div><div class="add">italic</div><div class="add">hyperlinks</div><div id="send">post</div></div>
+    <div id="postings"><i class="fa fa-spinner fa-pulse"></i>loading...</div>
+    <div id="postBg"><div id="postingsMessage"></div><div class="discuss"><textarea placeholder="discuss(Enter)"></textarea><div>discuss</div></div></div>
   </div>
-  <div class="buttomdiv">站长：<a target="_blank" href="//space.bilibili.com/628596718">国王的晚餐</a></div>
+  <div class="blog"></div>
+  <div class="video"></div>
+  <div class="buttomdiv">webmaster：<a target="_blank" href="space.bilibili.com/628596718">king's dinner</a></div>
   <script type="module" src="./js/index.js"></script>
 </body>
 </html>
