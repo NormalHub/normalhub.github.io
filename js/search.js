@@ -1,4 +1,4 @@
-document.getElementById("key").innerHTML = "你的搜索："+decodeURI(window.location.search.slice(1));
+document.getElementById("key").innerHTML = "key word: "+decodeURI(window.location.search.slice(1));
 var key = new RegExp(decodeURI(window.location.search.slice(1)));
 var getOpus=new XMLHttpRequest();
 getOpus.open("GET", "./document/wokes", true);

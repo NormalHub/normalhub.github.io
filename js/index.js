@@ -2,240 +2,221 @@ import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+
 var SupabaseUrl = "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com";
 var SupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImV4cCI6MzI4ODM0Njc1NywiaWF0IjoxNzExNTQ2NzU3LCJpc3MiOiJzdXBhYmFzZSJ9.iee2MqZMWv-d3mRWC0YPdaganE9y58EEcw3xEh4aNk8";
 const supabase = createClient(SupabaseUrl, SupabaseKey);
-import {convertToHTML} from "./markdown.js";
-
 //重复调用的函数
-function getUserName(){
-  for(var t=cookies.length;t--;t>0){if(cookies[t].indexOf("user_name")!=-1){var name = cookies[t].split("=")[1];}}
-  var notNull = /[^ ]/g;
-  if(name==""||name==null||!notNull.test(name)||name=="null"){
-    var name = prompt("Please enter your user name","guest"+Math.floor(Math.random()*5000));
-    var date = new Date();
-    date.setTime(date.getTime()+(365*24*3600000));
-    var expires="expires="+date.toGMTString()+";";
-    var content="user_name="+name+";";
-    document.cookie=content+expires+"path=/";
-  }
-  return name;
+function timeConverter(time_number){
+  var d = new Date();
+  d.setTime(Number(time_number));
+  var year = d.getFullYear();
+  var month = d.getMonth()+1;
+  var day = d.getDate();
+  var hour = d.getHours();
+  var minute = d.getMinutes();
+  if(month<10){month = "0" + month;}
+  if(day<10){day = "0" + day;}
+  if(hour<10){hour = "0" + hour;}
+  if(minute<10){minute = "0" + minute;}
+  var time_string = year+"/"+month+"/"+day+" "+hour+":"+minute;
+  return time_string;
 }
-function alertTip(text){
-  var tip = document.createElement("div");
-  tip.classList.add("waiting");
-  tip.innerHTML = "<p>"+text+"</p>";
-  document.body.appendChild(tip);
-  setTimeout(function(){tip.style.opacity=0;},1000)
-  setTimeout(function(){tip.remove();},2300)
+function alert(c){
+  var alertDiv = document.createElement("div");
+  alertDiv.className = "alert";
+  alertDiv.innerHTML = c;
+  document.body.appendChild(alertDiv);
+  setTimeout(function(){alertDiv.remove();},3000)
+}
+function cookieSet(content,expires_time){
+  var date = new Date();
+  date.setTime(date.getTime()+expires_time);
+  var expires="expires="+date.toGMTString()+";";
+  document.cookie=content+expires;
+  console.log(`已成功设置cookie：${content}`)
+}
+function cookieGet(keyword){
+  var cookies = decodeURI(document.cookie).split("; ");
+  for(var t=cookies.length;t--;t>0){if(cookies[t].indexOf(keyword)!=-1){return cookies[t].split("=")[1];}}
+}
+function cookieDelete(keyword){
+  document.cookie = `${keyword}=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+}
+function sortArray(array, bol) {
+  return array.sort((a, b) => {
+  const { key, order } = bol, valueA = a[key], valueB = b[key];
+  return valueA < valueB ? (order ? -1 : 1) : valueA > valueB ? (order ? 1 : -1) : 0;
+  })
 }
 
+cookieDelete("user_name")//删除曾经已游客名称登录的cookie
 var cookies = decodeURI(document.cookie).split("; ");
-//获取视频
-function getvideo(){
-  var videodiv=document.getElementsByClassName("video")[0];
-  var getvideo=new XMLHttpRequest();
-  getvideo.open("GET", "./document/wokes", true);
-  getvideo.onreadystatechange = function(){
-  if(getvideo.readyState==4 && getvideo.status==200){
-    var video = getvideo.responseText.split("\n");
-    for(var times=video.length;times--;times>0){
-      var videoInformation = video[times].split("&&");
-      var type=videoInformation[0].split("=")[1];
-      var videoName=videoInformation[1].split("=")[1];
-      var videoUrl=videoInformation[2].slice(videoInformation[2].indexOf("=")+1);
-      var videoIntroduction=videoInformation[3].split("=")[1];
-      var time=videoInformation[4].split("=")[1];
-      wokes(type,videoName,videoUrl,videoIntroduction,time);
-    }
+var userName = cookieGet("userName");
+var password = cookieGet("password");
+var u_id = cookieGet("id");
+var isLoggedIn = !(userName==null||userName==undefined);
+
+var userNameDom = document.getElementById("userName");
+var part_1 = document.getElementsByClassName("dashboard_part_1")[0];
+if(isLoggedIn){
+  userNameDom.innerHTML = `<a href="space.html" target="_blank">${userName}</a>`;
+  var {data,error} = await supabase.from('user').select('password,post,support,avatar,intro').eq('id',u_id);
+  if(password != data[0].password){
+    alert("密码错误！请重新登录");
+    cookieDelete("userName");
+    cookieDelete("password");
+    cookieDelete("id");
+    setTimeout(function(){location.reload();},2500)
   }
-  };
-  getvideo.send();
-  function wokes(type,videoName,videoUrl,videoIntroduction,time){
-    var box = document.createElement("a");
-    box.classList.add("box");
-    var title = document.createElement("div");
-    title.classList.add("title");
-    var timeElement = document.createElement("div");
-    timeElement.innerHTML="time: "+time;
-    title.innerHTML=videoName;
-    if(type=="视"){
-      box.href = "./video/?url="+videoUrl+"&&isShare=false";
-    }else if(type=="文"){
-      box.href = videoUrl;
-    }else if(type.indexOf("share")!=-1){
-      box.href = "./video/?url="+videoUrl+"&&isShare=true";
-    }
-    box.appendChild(title);
-    box.appendChild(timeElement);
-    videodiv.appendChild(box);
-  }
+  if(data[0].intro == null){data[0].intro = "还没有简介呢";}
+  part_1.innerHTML = `<div class="userColumn"><div><b>${userName}</b><p>${data[0].intro}</p></div></div>
+    <div class="profile"><div><b>${data[0].post}</b><p>帖子</p></div><div><b>${data[0].support}</b><p>获赞</p></div></div>
+    <div class="postButton">发帖</div>
+  `;
+  console.log(`已登录！name：${userName}，id：${u_id}，password：${password}，密码是否正确：${password==data[0].password}`);
+}else{
+  document.getElementsByClassName("postButton")[0].style.cursor = "not-allowed";
+  console.log("求求你注册一个账号吧~ o(TﾍTo)");
 }
-getvideo();
-//获取博客
-function getBlog(){
-  var xmlhttp;
-  if(window.XMLHttpRequest){xmlhttp = new XMLHttpRequest();}else{xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");}
-  xmlhttp.onreadystatechange = function(){if(xmlhttp.readyState==4 && xmlhttp.status==200){var list = JSON.parse(this.responseText);for(var x in list){creatBlog(list[x].title,list[x].writer,list[x].url,list[x].time);}}}
-  xmlhttp.open("GET","./document/blog.json",true);
-  xmlhttp.setRequestHeader("Content-Type","application/json;charset=UTF-8");
-  xmlhttp.send();
-  function creatBlog(title,writer,url,time){
-    var box = document.createElement("a");
-    box.classList.add("box");
-    var titleElement = document.createElement("div");
-    titleElement.classList.add("title");
-    var timeElement = document.createElement("div");
-    timeElement.innerHTML="time: "+time;
-    titleElement.innerHTML="title: "+title;
-    box.href = url;
-    box.appendChild(titleElement);
-    box.appendChild(timeElement);
-    document.getElementsByClassName("blog")[0].appendChild(box);
-  }
-}
-getBlog();
+
 //获取帖子
+var order = {key:"t",order:true};//排序标准默认是时间
+var emojiArray = ["angry","anguished","anxious","beaming_smiling_eyes","broken_heart","clown","confused","disappointed","expressionless","blowing_a_kiss","exhaling","holding_back_tears","savoring_food","screaming_in_fear","vomiting","hand_over_mouth","head-bandage","open_eyes_hand_over_mouth","peeking_eye","raised_eyebrow","rolling_eyes","spiral_eyes","steam_from_nose","symbols_on_mouth","tears_of_joy","fearful","flushed","frowning","ghost","grimacing","grinning_smiling_eyes_1","grinning_sweat","hear-no-evil_monkey_1","hot","hundred_points","kissing_smiling_eyes","knocked-out","loudly_crying","money-mouth","nerd","neutral","persevering","pile_of_poo","pleading_1","pouting","red_heart_1","relieved","rolling_on_the_floor_laughing","sad_but_relieved","saluting","see-no-evil_monkey","shushing","sleeping","slightly_frowning","smiling_heart-eyes","smiling_smiling_eyes","smiling_sunglasses","smirking","speak-no-evil_monkey","squinting_tongue","sweat_droplets","thinking","unamused","upside-down","winking","worried","yawning","zany"];
 async function getPostings(){
   var postings = document.getElementById("postings");
-  const { data, error } = await supabase.from('posting').select();
-  postings.innerHTML="";
-  function dateData(property,bol){//property是排序传入的key,bol为true升序false为降序
-    return function(a,b){var value1 = a[property];var value2 = b[property];if(bol){return Date.parse(value1)-Date.parse(value2);}else{return Date.parse(value2)-Date.parse(value1)}} 
-  } 
-  data.sort(dateData("like", true));
-  var postingLiked="";
-  for(var t=cookies.length;t--;t>0){if(cookies[t].indexOf("like")!=-1){postingLiked=cookies[t];}}
-  for(var i=data.length;i--;i>0){
-    var time = data[i].time;
-    if(time.indexOf("follow")!=-1){continue;}
-    var content = data[i].content;
-    var sender = data[i].sender;
-    var d = new Date();
-    d.setTime(Number(time));
-    var year = d.getFullYear();
-    var month = d.getMonth()+1;
-    var day = d.getDate();
-    if(month<10){var month = "0" + month;}
-    if(day<10){var day = "0" + day;}
-    var date = year+"/"+month+"/"+day;
+  var posting_supported = cookieGet("support");
+  if(posting_supported!=undefined){posting_supported = JSON.parse(posting_supported);}else{posting_supported=[]}
+  var {data,error} = await supabase.from('posting').select();
+  var dArray = data;
+  var {data} = await supabase.from('user').select('u_name,id,avatar');//将uid和uname关联
+  sortArray(dArray,order);
+  sortArray(data,{key:"id",order:true});
+  postings.innerHTML = "";
+  for(var i=dArray.length;i--;i>0){
+    var time_ms = dArray[i].t,
+      content = dArray[i].c,
+      support = dArray[i].s,
+      reply = dArray[i].r,
+      id = dArray[i].u,
+      pv = dArray[i].PV,
+      time = timeConverter(time_ms);
+    if(data[id].avatar == null){data[id].avatar="https://www.tianya.im/avatar/6/63/18310/100"}
+    var user = {name: data[id].u_name,avatar: data[id].avatar};
+    for(var each=emojiArray.length;each>0;each--){
+      var regex = new RegExp(`:${emojiArray[each-1]}:`, 'g');
+      content = content.replace(regex,`<div class="post_emoji" style="background-position-x: ${(each-1)*-20}px;"></div>`);
+    }
     var postingDiv = document.createElement("div");
     postingDiv.classList.add("postingdiv");
-    postingDiv.id = time;
-    postingDiv.innerHTML = "<div class='postingDivContent'><div>"+convertToHTML(content)+"</div><div>"+date+"</div><div>"+sender+"</div></div><div class='fa fa-thumbs-o-up'>"+data[i].like+"</div>";
+    postingDiv.innerHTML = `<div class="post_avatar" style="background-image: url(${user.avatar})"></div>
+    <div class='post-header'><b>${user.name}</b><small>${time}</small></div>
+    <div class="post_message">${content}</div>
+    <div class="post-actions"><a href="javascript:void(0);" id="${time_ms}" class="support_n" name="${id}">${support}</a><a href="./t.html?id=${time_ms}&poster=${id}" target="_blank" class="reply">${reply}</a><a href="./t.html?id=${time_ms}&poster=${id}" target="_blank" class="more">查看详情</a></div>`;
     postings.appendChild(postingDiv);
-    document.getElementsByClassName("fa-thumbs-o-up")[document.getElementsByClassName("fa-thumbs-o-up").length-1].id = data[i].like;
-    postingDiv.onclick = function(){
-      if(event.target.className.indexOf("fa")!=-1){return;}
-      postingsMessage(this.id,this.children[0].children[0].innerHTML,this.children[0].children[1].innerHTML,this.children[0].children[2].innerHTML);
+    
+    for(var t=0;t<posting_supported.length;t++){
+      if(posting_supported[t] == time_ms){document.getElementById(time_ms).className="support_y";}
     }
-    document.getElementsByClassName("fa-thumbs-o-up")[document.getElementsByClassName("fa-thumbs-o-up").length-1].addEventListener("click",async function(){
-      var postingId = this.parentNode.id;
-      var date = new Date();
-      date.setTime(date.getTime()+(365*24*60*60000));
-      var expires="expires="+date.toGMTString()+";";
-      if(this.className=="fa fa-thumbs-up"){
-        this.id = Number(this.id)-1;
-        this.className = "fa fa-thumbs-o-up";
+    document.getElementById(time_ms).addEventListener("click",async function(){
+      var postingId = this.id;
+      var sender_id = this.name;
+      if(this.className=="support_y"){
+        this.innerHTML--;
+        this.className = "support_n";
+        posting_supported = posting_supported.filter(item => item != postingId);
+        var {data,error} = await supabase.from('user').select('support').eq('id',sender_id);
+        var {error} = await supabase.from('user').update({support:(data[0].support-1)}).eq('id',sender_id);
       }else{
-        this.id = Number(this.id)+1;
-        this.className = "fa fa-thumbs-up";
+        this.innerHTML++;
+        this.className = "support_y";
+        posting_supported.push(postingId);
+        var {data,error} = await supabase.from('user').select('support').eq('id',sender_id);
+        var {error} = await supabase.from('user').update({support:(data[0].support+1)}).eq('id',sender_id);
       }
-      this.innerHTML = this.id;
-      var {error} = await supabase.from('posting').update({like:this.id}).eq('time',postingId);
-      var faThumbsUp = document.getElementsByClassName("fa-thumbs-up");
-      var faThumbsUpId = [];
-      for(var t=faThumbsUp.length;t--;t>0){faThumbsUpId.push(faThumbsUp[t].parentNode.id);}
-      var content = "like="+faThumbsUpId.toString()+";";
-      document.cookie=content+expires;
+      var {error} = await supabase.from('posting').update({s:this.innerHTML}).eq('t',postingId);
+      var content = "support="+JSON.stringify(posting_supported)+";";
+      cookieSet(content,365*24*60*60000);
     })
-    if(postingLiked.indexOf(data[i].time.toString())!=-1){document.getElementsByClassName("fa-thumbs-o-up")[document.getElementsByClassName("fa-thumbs-o-up").length-1].className="fa fa-thumbs-up";}
   }
 }
 getPostings();
-// 详情
-var postMessageDom = document.getElementById("postingsMessage");
-async function postingsMessage(time,content,date,sender){
-  if(window.innerWidth<=600){//小窗口/移动端
-    document.getElementById("postBg").style.height = "80%";
-    var bg = document.createElement("div");
-    setTimeout(function(){bg.className = "bg";},200);
-    document.body.insertBefore(bg,document.body.children[0]);
-    bg.onclick = function(){
-      this.remove();
-      document.getElementById("postBg").style.height = 0;
-      bg.onclick = null;
-    }
-  }
-  
-  document.getElementsByClassName("discuss").id = time;
-  postMessageDom.innerHTML = '<p><i class="fa fa-spinner fa-pulse"></i>loading...</p>';
-  const { data, error } = await supabase.from('posting').select();
-  postMessageDom.innerHTML = "";
-  
-  var element = document.createElement("div");
-  element.innerHTML = '<p id="description">'+sender+'：</p><p>'+content+'</p>'+date+"<p>reply:</p>";
-  postMessageDom.insertBefore(element,postMessageDom.children[0]);
-  
-  for(var t=data.length;t--;t>0){
-    if(data[t].time.indexOf("follow"+time)!=-1){
-      var element = document.createElement("div");
-      element.innerHTML = "<p>"+data[t].sender+"："+convertToHTML(data[t].content)+"</p>";
-      postMessageDom.appendChild(element);
-    }
-  }
-}
 //发帖
 document.getElementsByClassName("postButton")[0].onclick = function(){
-  document.getElementsByClassName("publishingPost")[0].style.height = "80%";
+  if(!isLoggedIn){alert("点右上角登录后才能发帖");return}
   var bg = document.createElement("div");
-  setTimeout(function(){bg.className = "bg";},200);
-  document.body.insertBefore(bg,document.body.children[0]);
-  bg.onclick = function(){
-    this.remove();
-    document.getElementsByClassName("publishingPost")[0].style.height = 0;
-    bg.onclick = null;
+  bg.className = "bg";
+  bg.innerHTML = `<div class="post">
+    <div class="post_header"><p style="line-height: 10px;">请注意文明用语，谢谢！</p><p id="post_off">X</p></div>
+    <textarea id="post_value" cols="30" rows="3"></textarea>
+    <div class="ending">
+      <div id="emoji">表情</div>
+      <div class="emoji">
+        <div class="emoji_header">
+          <div style="font-size:20px" id="emoji_default">🙂</div>
+          <div style="font-size:20px;color:red;" id="emoji_custom">❤</div>
+          <div class="center"></div>
+          <div id="emoji_off">X</div>
+        </div>
+        <div class="emoji_body"></div>
+      </div>
+      <div class="center"></div>
+      <div id="post">发送</div>
+    </div>
+  </div>`;
+  document.body.appendChild(bg);
+  document.getElementById("post_off").onclick = function(){bg.remove();}
+  var textarea = document.getElementById("post_value");
+  var isPosted = false;
+  document.getElementById("post").onclick = async function send(){
+    var content = textarea.value;
+    var notNull = /[^ ]/g;
+    if(content==""||!notNull.test(content)){alert("内容不能为空");return;}
+    var time = new Date().getTime();
+    if(!isPosted){isPosted = true;setTimeout(function(){isPosted = false},3000);}else{return;}//防止用户不小心重复发帖
+    var {error} = await supabase.from('posting').insert({u:u_id,c:content,t:time});
+    alert("已发送");
+    var {data,error} = await supabase.from('user').select('post').eq('id',u_id);//user的post数+1
+    var {error} = await supabase.from('user').update({post: (data[0].post+1)}).eq('id',u_id);
+    
+    bg.remove();//在页面上显示帖子
+    order = {key: "t",order: true}
+    document.getElementById("order").innerHTML = "新 /热";
+    getPostings();
+  }
+  document.getElementById("emoji").onclick = function(){
+    document.getElementsByClassName("emoji")[0].style.display = "block";
+    var div = document.getElementsByClassName("emoji_body")[0];
+    for(var each in emojiArray){
+      var childDiv = document.createElement("div");
+      childDiv.style.backgroundPositionX = each*-40+"px";
+      childDiv.id = emojiArray[each];
+      div.appendChild(childDiv);
+    }
+    div.onclick = function(){
+      var char = ":"+event.target.id+":";
+      var index = textarea.selectionStart;
+      var str = textarea.value;
+      textarea.value = str.slice(0, index) + char + str.slice(index);
+      textarea.focus();
+    }
+    document.getElementById("emoji_default").onclick = function(){}
+    document.getElementById("emoji_custom").onclick = function(){alert("开发中...")}
+    document.getElementById("emoji_off").onclick = function(){document.getElementsByClassName("emoji")[0].style.display = "none";}
   }
 }
-document.getElementById("send").onclick = async function send(){
-  var user = getUserName();
-  var content = document.getElementById("postContent").value;
-  var notNull = /[^ ]/g;
-  if(content==""||!notNull.test(content)){alertTip("cannot be null");return;}
-  var time = new Date().getTime();
-  const { error } = await supabase.from('posting').insert({sender:user, content:content, time:time});
-  alertTip("the posting get sent");
-  location.reload();
-}
+/*
 var postContent = document.getElementById('postContent');
-var addDoms = document.getElementsByClassName("add");
-addDoms[0].onclick = function(){
-  var selectedText = postContent.value.substring(postContent.selectionStart, postContent.selectionEnd);
-  postContent.value = postContent.value.substring(0, postContent.selectionStart) + `**${selectedText}**` + postContent.value.substring(postContent.selectionEnd);
-}
-addDoms[1].onclick = function(){
-  var selectedText = postContent.value.substring(postContent.selectionStart, postContent.selectionEnd);
-  postContent.value = postContent.value.substring(0, postContent.selectionStart) + `*${selectedText}*` + postContent.value.substring(postContent.selectionEnd);
-}
-addDoms[2].onclick = function(){
+var add_link = document.getElementsByClassName("");
+add_link.onclick = function(){
   var selectedText = postContent.value.substring(postContent.selectionStart, postContent.selectionEnd);
   var link = prompt('Please enter jump link: ');
   postContent.value = postContent.value.substring(0, postContent.selectionStart) + `[${selectedText}](${link})` + postContent.value.substring(postContent.selectionEnd);
 }
-//评论
-document.getElementsByClassName("discuss")[0].children[1].onclick = async function(){
-  var user = getUserName();
-  var content = document.getElementsByClassName("discuss")[0].children[0].value;
-  var notNull = /[^ ]/g;
-  if(content==""||!notNull.test(content)){
-    alertTip("cannot be null");
-    return;
-  }
-  var follow_time = document.getElementsByClassName("discuss").id;
-  var time = new Date().getTime()+"follow"+follow_time;
-  document.getElementsByClassName("discuss")[0].children[0].value="";
-  const {error} = await supabase.from('posting').insert({content:content, time:time,sender:user});
-  var element = document.createElement("div");
-  element.innerHTML = "<p>"+user+"："+content+"</p>";
-  postMessageDom.appendChild(element);
+*/
+document.getElementById("order").onclick = function(){
+  this.innerHTML = (this.innerHTML=="新 /热") ? "热 /新" : "新 /热";
+  order = (order.key=="t" && order.order==true) ? {key:"s",order:true} : {key:"t",order:true};
+  getPostings();
 }
+document.getElementById("style").onclick = function(){alert("还在开发中")}
+
 //搜素
 document.getElementById("search").onclick = search;
 function search(){
@@ -253,26 +234,54 @@ window.addEventListener("keydown",function(){
   if(element.tagName == "INPUT"&&key == "Enter"){search();return;}
   if(element.parentElement.className == "discuss"&&key == "Enter"){document.getElementsByClassName("discuss")[0].children[1].click();return;}
 });
-//切换页面
-(function(){
-  function saveCookie(page){var d=new Date();d.setTime(d.getTime()+(2592000000));var expires="expires="+d.toGMTString()+";";var content="page="+page+";";document.cookie=content+expires+"path=/";}
-  var tbl= document.getElementsByClassName("tbl");
-  var juzhong = document.getElementsByClassName("juzhong")[0];
-  var p = [document.getElementsByClassName("postings")[0],document.getElementsByClassName("blog")[0],document.getElementsByClassName("video")[0]];
-  for(var t=tbl.length;t--;t>0){tbl[t].addEventListener("click",function(){
-    for(var x in p){p[x].style.display="none";}
-    if(this.innerHTML=="posting"){
-      p[0].style.display="flex";
-      saveCookie("posting");
-    }else if(this.innerHTML=="blog"){
-      p[1].style.display="block";
-      saveCookie("blog");
-    }else if(this.innerHTML=="video"){
-      p[2].style.display="block";
-      saveCookie("video");
+
+//百度统计
+if(location.href.indexOf("www.kingdinner.top")!=-1){
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?174786ee7cb4743d7dfd121a237e550e";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  console.log("网站统计已开启");
+}
+//移动端滑出侧边栏
+if(document.body.offsetWidth < 600){
+  document.body.ontouchstart = function(){
+    var startX = event.targetTouches[0].pageX;
+    var startY = event.targetTouches[0].pageY;
+    var endX;
+    var endY;
+    document.body.ontouchmove = function(){
+      endX = event.targetTouches[0].pageX;
+      endY = event.targetTouches[0].pageY;
     }
-  })}
-  for(var t in cookies){if(cookies[t]=="page=posting"){p[0].style.display="flex";}else if(cookies[t]=="page=blog"){p[1].style.display="block";}else if(cookies[t]=="page=video"){p[2].style.display="block";}else{p[0].style.display="flex";}}
-  document.getElementsByClassName("frontDiv")[0].remove();
-}())
-//fetch('https://ipapi.co/json/').then(response=>response.json()).then(data=>{region = data.region;})
+    document.body.ontouchend = function(){
+      var posX = endX-startX;
+      var posY = endY-startY;
+      if(posY > 100 && Math.abs(posX) < Math.abs(posY)){}//下拉刷新页面
+      if(posX > 100 && Math.abs(posX) > Math.abs(posY)){
+        //右滑
+      }else if(posX <-100 && Math.abs(posX) > Math.abs(posY)){
+        //左滑出现用户栏
+        document.getElementsByClassName("dashboard")[0].style.transform = "translateX(-100%)";
+        var div = document.createElement("div");
+        div.className = "bg";
+        div.onclick = function(){
+          document.getElementsByClassName("dashboard")[0].style.transform = "translateX(0%)";
+          div.remove();
+          div.onclick = null;
+          document.getElementsByClassName("dashboard")[0].style.zIndex = "auto";
+        }
+        document.body.appendChild(div);
+        //防止遮挡postdiv
+        div.style.zIndex = 8;
+        document.getElementsByClassName("dashboard")[0].style.zIndex = 9;
+      }
+      //解绑事件
+      document.body.ontouchmove = null;
+      document.body.ontouchend = null;
+    }
+  }
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8">
+    <title>帖子详情</title>
+    <link rel="icon" href="./imgs/xie.png">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" type="text/css" href="./css/posting.css"/>
+  </head>
+  <body>
+    <div class="header">
+      <div class="left"><a href="//www.kingdinner.top">疯人院</a></div>
+      <div class="center">
+        <input placeholder="搜索" class="sousuokuang" id="searchInput"/>
+        <div id="search">↗</div>
+      </div>
+      <div class="right" id="userName"><a href="space.html" target="_blank">登录</a></div>
+    </div>
+    <div class="wrapper">
+      <div class="content">
+        <div id="posting">加载中...</div>
+        <div class="post">
+          <textarea id="post_value" cols="30" rows="3" placeholder="发布一条评论吧"></textarea>
+          <div class="ending">
+            <div id="emoji">表情</div>
+            <div class="emoji">
+              <div class="emoji_header"><div style="font-size:20px" id="emoji_default">🙂</div><div style="font-size:20px;color:red;" id="emoji_custom">❤</div><div class="center"></div><div id="emoji_off">X</div></div>
+              <div class="emoji_body"></div>
+            </div>
+            <div class="center"></div>
+            <div id="post">发送</div>
+          </div>
+        </div>
+        <div id="reply"><div class="text_reply">回复：</div></div>
+      </div>
+      <div class="dashboard">
+        <div class="dashboard_part_1">
+          <div class="userColumn"><div><b>未登录</b><p>还没有简介呢</p></div></div>
+          <div class="profile"><div><b>0</b><p>帖子</p></div><div><b>0</b><p>获赞</p></div></div>
+        </div>
+        <div class="dashboard_part_2">
+          <div id="order">新 /热</div>
+          <div id="style">早 /晚</div>
+        </div>
+      </div>
+    </div>
+    
+    <script type="module" src="./js/posting.js"></script>
+    <script type="text/javascript" src="js/client.js"></script>
+  </body>
+</html>

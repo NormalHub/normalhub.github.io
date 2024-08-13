@@ -15,7 +15,7 @@ var convertToHTML = function (text){
   // 转换水平分隔线
   text = text.replace(/^-{3,}/gm, '<hr>');
   // 转换普通段落
-  text = text.replace(/^(?![<\/*h])(.+)$/gm, '<p>$1</p>');
+  // text = text.replace(/^(?![<\/*h])(.+)$/gm, '<p>$1</p>');
   // 转换链接
   text = text.replace(/\[(.*?)\]\((.*?)\)/g, '<a target="_blank" href="$2">$1</a>');
   // 转换图片
