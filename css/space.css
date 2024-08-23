@@ -55,6 +55,7 @@ html,body{
   display: flex;
   border-bottom: solid 2px #00000014;
   align-items: center;
+  min-width: 320px;
 }
 .left,.right{
   width: fit-content;
@@ -102,7 +103,7 @@ a{
   font-size: 14px;
   color: #333;
 }
-.follow_buttom{
+.follow_buttom,#edit{
   padding: 5px 10px;
   border-radius: 8px;
   color: #fff;
@@ -110,9 +111,7 @@ a{
   cursor: pointer;
   background-color: #27bae7;
 }
-.userColumn::before{
-  content: "";
-  display: block;
+.avatar,.avatar_edit{
   background-size: 50px 50px;
   background-image: url("https://www.tianya.im/avatar/6/63/18310/100");
   width: 50px;
@@ -121,8 +120,56 @@ a{
   float: left;
   margin-right: 10px;
 }
+.avatar_edit:hover::after{
+  content: "更改头像";
+  display: block;
+  width: 50px;
+  line-height: 50px;
+  border-radius: 50%;
+  background-color: #00000080;
+  color: aliceblue;
+  font-size: 11px;
+  text-align: center;
+}
 .userColumn{
   display: flex;
+}
+.userColumn input{
+  border: 0;
+  border-bottom: 2px solid #ccc;
+  font-size: 14px;
+  transition: 0.3s;
+}
+input:focus{
+  outline: 0px;
+  border-bottom: 2px solid #000;
+}
+#img{
+  user-select: none;
+}
+#clip{
+  box-shadow: 0 0 0 9999em #00000080;
+  width:100px;
+  height:100px;
+  position: absolute;
+  user-select: none;
+  border: 3px solid #53a1ff;
+  border-radius: 50%;
+}
+#clip_buttom{
+  background: #5d5d5d;
+  color: aliceblue;
+  position: absolute;
+  bottom: 70px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  user-select: none;
+}
+#clip_buttom:hover{
+  background: #505050;
+}
+#canvas,#canvas_img{
+  display: none;
 }
 .profile{
   border-top: #777 2px solid;
