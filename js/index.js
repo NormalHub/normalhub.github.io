@@ -1,3 +1,4 @@
+console.log("你想干什么？＼(º □ º l|l)/")
 import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 var SupabaseUrl = "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com";
 var SupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImV4cCI6MzI4ODM0Njc1NywiaWF0IjoxNzExNTQ2NzU3LCJpc3MiOiJzdXBhYmFzZSJ9.iee2MqZMWv-d3mRWC0YPdaganE9y58EEcw3xEh4aNk8";
@@ -58,6 +59,7 @@ var part_1 = document.getElementsByClassName("dashboard_part_1")[0];
 if(isLoggedIn){
   userNameDom.innerHTML = `<a href="space.html" target="_blank">${userName}</a>`;
   var {data,error} = await supabase.from('user').select('password,post,support,avatar,intro').eq('id',u_id);
+  var avatar = (data[0].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${u_id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
   if(password != data[0].password){
     alert("密码错误！请重新登录");
     cookieDelete("userName");
@@ -66,7 +68,7 @@ if(isLoggedIn){
     setTimeout(function(){location.reload();},2500)
   }
   if(data[0].intro == null){data[0].intro = "还没有简介呢";}
-  part_1.innerHTML = `<div class="userColumn"><div><b>${userName}</b><p>${data[0].intro}</p></div></div>
+  part_1.innerHTML = `<div class="userColumn"><div class="avatar" style="background-image:url(${avatar})"></div><div><b>${userName}</b><p>${data[0].intro}</p></div></div>
     <div class="profile"><div><b>${data[0].post}</b><p>帖子</p></div><div><b>${data[0].support}</b><p>获赞</p></div></div>
     <div class="postButton">发帖</div>
   `;
@@ -97,15 +99,15 @@ async function getPostings(){
       id = dArray[i].u,
       pv = dArray[i].PV,
       time = timeConverter(time_ms);
-    if(data[id].avatar == null){data[id].avatar="https://www.tianya.im/avatar/6/63/18310/100"}
-    var user = {name: data[id].u_name,avatar: data[id].avatar};
+    var avatar = (data[id].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
+    var user = {name: data[id].u_name};
     for(var each=emojiArray.length;each>0;each--){
       var regex = new RegExp(`:${emojiArray[each-1]}:`, 'g');
       content = content.replace(regex,`<div class="post_emoji" style="background-position-x: ${(each-1)*-20}px;"></div>`);
     }
     var postingDiv = document.createElement("div");
     postingDiv.classList.add("postingdiv");
-    postingDiv.innerHTML = `<div class="post_avatar" style="background-image: url(${user.avatar})"></div>
+    postingDiv.innerHTML = `<div class="post_avatar" style="background-image: url(${avatar})"></div>
     <div class='post-header'><b>${user.name}</b><small>${time}</small></div>
     <div class="post_message">${content}</div>
     <div class="post-actions"><a href="javascript:void(0);" id="${time_ms}" class="support_n" name="${id}">${support}</a><a href="./t.html?id=${time_ms}&poster=${id}" target="_blank" class="reply">${reply}</a><a href="./t.html?id=${time_ms}&poster=${id}" target="_blank" class="more">查看详情</a></div>`;
@@ -246,42 +248,61 @@ if(location.href.indexOf("www.kingdinner.top")!=-1){
   })();
   console.log("网站统计已开启");
 }
-//移动端滑出侧边栏
-if(document.body.offsetWidth < 600){
-  document.body.ontouchstart = function(){
-    var startX = event.targetTouches[0].pageX;
-    var startY = event.targetTouches[0].pageY;
-    var endX;
-    var endY;
-    document.body.ontouchmove = function(){
-      endX = event.targetTouches[0].pageX;
-      endY = event.targetTouches[0].pageY;
-    }
-    document.body.ontouchend = function(){
-      var posX = endX-startX;
-      var posY = endY-startY;
-      if(posY > 100 && Math.abs(posX) < Math.abs(posY)){}//下拉刷新页面
-      if(posX > 100 && Math.abs(posX) > Math.abs(posY)){
-        //右滑
-      }else if(posX <-100 && Math.abs(posX) > Math.abs(posY)){
-        //左滑出现用户栏
-        document.getElementsByClassName("dashboard")[0].style.transform = "translateX(-100%)";
-        var div = document.createElement("div");
-        div.className = "bg";
-        div.onclick = function(){
-          document.getElementsByClassName("dashboard")[0].style.transform = "translateX(0%)";
-          div.remove();
-          div.onclick = null;
-          document.getElementsByClassName("dashboard")[0].style.zIndex = "auto";
+
+//防抖
+function debounce(func, delay) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {func.apply(this, args);}, delay);
+  };
+}
+window.onresize = debounce(usePhone,500);
+function usePhone(){
+  var dashboard = document.getElementsByClassName("dashboard")[0].style;
+  document.body.ontouchstart = null;
+  if(document.body.offsetWidth <= 600){
+    var bool = false;//默认没有左滑打开侧边栏
+    document.body.ontouchstart = function(){
+      var startX = event.targetTouches[0].pageX,startY = event.targetTouches[0].pageY;
+      var endX,endY;
+      document.body.ontouchmove = function(){endX = event.targetTouches[0].pageX;endY = event.targetTouches[0].pageY;}
+      document.body.ontouchend = function(){
+        var posX = endX-startX,posY = endY-startY;
+        if(posY > 100 && Math.abs(posX) < Math.abs(posY)){}//下拉刷新页面
+        if(posX > 100 && Math.abs(posX) > Math.abs(posY)){
+          //右滑
+        }else if(posX <-100 && Math.abs(posX) > Math.abs(posY)){
+          //左滑出现用户栏
+          if(bool == true){return;}
+          bool = true;
+          dashboard.transform = "translateX(-100%)";
+          var div = document.createElement("div");
+          div.className = "bg";
+          div.style.zIndex = 8;
+          dashboard.zIndex = 9;
+          div.onclick = function(){
+            bool = false;
+            dashboard.transform = "translateX(100%)";
+            div.remove();
+            dashboard.zIndex = 0;
+            div.onclick = null;
+          }
+          document.body.appendChild(div);
         }
-        document.body.appendChild(div);
-        //防止遮挡postdiv
-        div.style.zIndex = 8;
-        document.getElementsByClassName("dashboard")[0].style.zIndex = 9;
+        //解绑事件
+        document.body.ontouchmove = null;
+        document.body.ontouchend = null;
       }
-      //解绑事件
-      document.body.ontouchmove = null;
-      document.body.ontouchend = null;
     }
+  }else if(dashboard.transform == "translateX(100%)"){
+    dashboard.transform = "translateX(0%)";
+    dashboard.zIndex = 0;
   }
+}
+usePhone();
+async function returnError(){
+  var userAgent = navigator.userAgent+","+document.body.offsetWidth+""+document.body.offsetHeight;
+  var c = document.getElementById("error").value;
+  var {error} = await supabase.from('error').insert({equipment: userAgent,error: c});
 }

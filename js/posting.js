@@ -74,6 +74,11 @@ if(isLoggedIn){
   console.log("求求你注册一个账号吧~ o(TﾍTo)");
 }
 
+function getPoster(u_name,post,support,avatar,intro){
+  if(intro == null){intro = "还没有简介呢";}
+  part_1.innerHTML = `<div class="userColumn"><div class="avatar" style="background-image:url(${avatar})"></div><div><b>${u_name}</b><p>${intro}</p></div></div>
+    <div class="profile"><div><b>${post}</b><p>帖子</p></div><div><b>${support}</b><p>获赞</p></div></div>`;
+}
 var emojiArray = ["angry","anguished","anxious","beaming_smiling_eyes","broken_heart","clown","confused","disappointed","expressionless","blowing_a_kiss","exhaling","holding_back_tears","savoring_food","screaming_in_fear","vomiting","hand_over_mouth","head-bandage","open_eyes_hand_over_mouth","peeking_eye","raised_eyebrow","rolling_eyes","spiral_eyes","steam_from_nose","symbols_on_mouth","tears_of_joy","fearful","flushed","frowning","ghost","grimacing","grinning_smiling_eyes_1","grinning_sweat","hear-no-evil_monkey_1","hot","hundred_points","kissing_smiling_eyes","knocked-out","loudly_crying","money-mouth","nerd","neutral","persevering","pile_of_poo","pleading_1","pouting","red_heart_1","relieved","rolling_on_the_floor_laughing","sad_but_relieved","saluting","see-no-evil_monkey","shushing","sleeping","slightly_frowning","smiling_heart-eyes","smiling_smiling_eyes","smiling_sunglasses","smirking","speak-no-evil_monkey","squinting_tongue","sweat_droplets","thinking","unamused","upside-down","winking","worried","yawning","zany"];
 var posting_supported = cookieGet("support");
 if(posting_supported!=undefined){posting_supported = JSON.parse(posting_supported);}else{posting_supported=[]}
@@ -88,15 +93,16 @@ async function getPosting(){
     pv = data[0].pv+1,
     time = timeConverter(time_ms);
   var {error} = await supabase.from('posting').update({pv: pv}).eq('t',posting_id);//浏览数+1
-  var {data} = await supabase.from('user').select('u_name,avatar').eq("id",id);//将uid和uname关联
-  if(data[0].avatar == null){data[0].avatar="//www.tianya.im/avatar/6/63/18310/100";}
-  var user = {name: data[0].u_name,avatar: data[0].avatar};
+  var {data} = await supabase.from('user').select('u_name,post,support,avatar,intro').eq("id",id);//将uid和uname关联
+  var avatar = (data[0].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
+  var user = data[0].u_name;
+  getPoster(user,data[0].post,data[0].support,avatar,data[0].intro);
   for(var each=emojiArray.length;each>0;each--){
     var regex = new RegExp(`:${emojiArray[each-1]}:`, 'g');
     content = content.replace(regex,`<div class="post_emoji" style="background-position-x: ${(each-1)*-20}px;"></div>`);
   }
-  posting.innerHTML = `<div class="post_avatar" style="background-image: url(${user.avatar})"></div>
-  <div class='post_header'><b>${user.name}</b><small>${time}</small></div>
+  posting.innerHTML = `<div class="post_avatar" style="background-image:url(${avatar})"></div>
+  <div class='post_header'><b>${user}</b><small>${time}</small></div>
   <div class="post_message">${content}</div>
   <div class="post_actions"><a href="javascript:void(0);" id="${time_ms}" class="support_n" name="${id}">${support}</a><a href="javascrpit:void(0);" class="reply">${reply}</a><a class="pv">${pv}</a></div>`;
   
@@ -130,19 +136,12 @@ async function getPosting(){
 }
 getPosting();
 
-async function getPoster(){
-  var {data,error} = await supabase.from('user').select('u_name,post,support,avatar,intro').eq('id',poster_id);
-  if(data[0].intro == null){data[0].intro = "还没有简介呢";}
-  part_1.innerHTML = `<div class="userColumn"><div><b>${data[0].u_name}</b><p>${data[0].intro}</p></div></div>
-    <div class="profile"><div><b>${data[0].post}</b><p>帖子</p></div><div><b>${data[0].support}</b><p>获赞</p></div></div>`;
-}
-getPoster();
-
 var order = {key:"t",order:true};//排序标准默认是时间
 var discuss_at_id;//回复的对象
 async function getReply(){
   var reply = document.getElementById("reply");
   var {data, error} = await supabase.from('reply').select().eq('at',posting_id);
+  if(data.length == 0){return;}
   var dArray = data;
   sortArray(dArray,order);
   var {data} = await supabase.from('discuss').select('*');
@@ -157,18 +156,18 @@ async function getReply(){
       support = dArray[i].s,
       id = dArray[i].u,
       time = timeConverter(time_ms);
-    if(data[id].avatar == null){data[id].avatar="//www.tianya.im/avatar/6/63/18310/100";}
-    var user = {name: data[id].u_name,avatar: data[id].avatar};
+    var avatar = (data[id].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
+    var name = data[id].u_name;
     for(var each=emojiArray.length;each>0;each--){
       var regex = new RegExp(`:${emojiArray[each-1]}:`, 'g');
       content = content.replace(regex,`<div class="post_emoji" style="background-position-x: ${(each-1)*-20}px;"></div>`);
     }
     var postingDiv = document.createElement("div");
     postingDiv.classList.add("reply_div");
-    postingDiv.innerHTML = `<div class="post_avatar" style="background-image: url(${user.avatar})"></div>
-    <div class='post_header'><b>${user.name}</b><small>${time}</small></div>
+    postingDiv.innerHTML = `<div class="post_avatar" style="background-image: url(${avatar})"></div>
+    <div class='post_header'><b>${name}</b><small>${time}</small></div>
     <div class="post_message">${content}</div>
-    <div class="post_actions"><a href="javascript:void(0);" id="${time_ms}" class="support_n" name="${id}">${support}</a><a href="javascript:void(0)" class="discuss" name="${user.name}">@</a><a></a></div>`;
+    <div class="post_actions"><a href="javascript:void(0);" id="${time_ms}" class="support_n" name="${id}">${support}</a><a href="javascript:void(0)" class="discuss" name="${name}">@</a><a></a></div>`;
     reply.appendChild(postingDiv);
     
     for(var t=0;t<discuss_array.length;t++){
@@ -176,7 +175,8 @@ async function getReply(){
         var div = document.createElement("div");
         div.classList.add("discuss_div");
         var time = new Date(discuss_array[t].t).toLocaleString().slice(0,-3);
-        div.innerHTML = `<div class="post_avatar" style="background-image: url(${user.avatar})"></div>
+        const avatar = (data[discuss_array[t].u].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
+        div.innerHTML = `<div class="post_avatar" style="background-image: url(${avatar})"></div>
           <div class='post_header'><b>${data[discuss_array[t].u].u_name}</b><small>${time}</small></div>
           <div class="post_message">${discuss_array[t].c}</div>`
         postingDiv.appendChild(div);
@@ -227,7 +227,7 @@ document.getElementById("post").onclick = async function send(){
   }else{
     var {error} = await supabase.from('reply').insert({u:u_id,c:content,t:time,at:posting_id});
   }
-  var {error} = await supabase.from('posting').update({r: (document.getElementsByClassName("reply")[0].innerHTML+1)}).eq('t',posting_id);
+  var {error} = await supabase.from('posting').update({r: Number(document.getElementsByClassName("reply")[0].innerHTML)+1}).eq('t',posting_id);
   var {data,error} = await supabase.from('user').select('post').eq('id',u_id);//user的post数+1
   var {error} = await supabase.from('user').update({post: (data[0].post+1)}).eq('id',u_id);
   alert("已发送");
@@ -275,42 +275,55 @@ if(location.href.indexOf("www.kingdinner.top")!=-1){
   })();
   console.log("网站统计已开启");
 }
-//移动端滑出侧边栏
-if(document.body.offsetWidth < 600){
-  document.body.ontouchstart = function(){
-    var startX = event.targetTouches[0].pageX;
-    var startY = event.targetTouches[0].pageY;
-    var endX;
-    var endY;
-    document.body.ontouchmove = function(){
-      endX = event.targetTouches[0].pageX;
-      endY = event.targetTouches[0].pageY;
-    }
-    document.body.ontouchend = function(){
-      var posX = endX-startX;
-      var posY = endY-startY;
-      if(posY > 100 && Math.abs(posX) < Math.abs(posY)){}//下拉刷新页面
-      if(posX > 100 && Math.abs(posX) > Math.abs(posY)){
-        //右滑
-      }else if(posX <-100 && Math.abs(posX) > Math.abs(posY)){
-        //左滑出现用户栏
-        document.getElementsByClassName("dashboard")[0].style.transform = "translateX(-100%)";
-        var div = document.createElement("div");
-        div.className = "bg";
-        div.onclick = function(){
-          document.getElementsByClassName("dashboard")[0].style.transform = "translateX(0%)";
-          div.remove();
-          div.onclick = null;
-          document.getElementsByClassName("dashboard")[0].style.zIndex = "auto";
+//防抖
+function debounce(func, delay) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {func.apply(this, args);}, delay);
+  };
+}
+window.onresize = debounce(usePhone,500);
+function usePhone(){
+  var dashboard = document.getElementsByClassName("dashboard")[0].style;
+  if(document.body.offsetWidth <= 600){
+    var bool = false;//默认没有左滑打开侧边栏
+    document.body.ontouchstart = function(){
+      var startX = event.targetTouches[0].pageX,startY = event.targetTouches[0].pageY;
+      var endX,endY;
+      document.body.ontouchmove = function(){endX = event.targetTouches[0].pageX;endY = event.targetTouches[0].pageY;}
+      document.body.ontouchend = function(){
+        var posX = endX-startX,posY = endY-startY;
+        if(posY > 100 && Math.abs(posX) < Math.abs(posY)){}//下拉刷新页面
+        if(posX > 100 && Math.abs(posX) > Math.abs(posY)){
+          //右滑
+        }else if(posX <-100 && Math.abs(posX) > Math.abs(posY)){
+          //左滑出现用户栏
+          if(bool == true){return;}
+          bool = true;
+          dashboard.transform = "translateX(-100%)";
+          var div = document.createElement("div");
+          div.className = "bg";
+          div.style.zIndex = 8;
+          dashboard.zIndex = 9;
+          div.onclick = function(){
+            bool = false;
+            dashboard.transform = "translateX(100%)";
+            div.onclick = null;
+            div.remove();
+            dashboard.zIndex = 0;
+          }
+          document.body.appendChild(div);
         }
-        document.body.appendChild(div);
-        //防止遮挡postdiv
-        div.style.zIndex = 8;
-        document.getElementsByClassName("dashboard")[0].style.zIndex = 9;
+        //解绑事件
+        document.body.ontouchmove = null;
+        document.body.ontouchend = null;
       }
-      //解绑事件
-      document.body.ontouchmove = null;
-      document.body.ontouchend = null;
     }
+  }else if(dashboard.transform == "translateX(100%)"){
+    document.body.ontouchstart = null;
+    dashboard.transform = "translateX(0%)";
+    dashboard.zIndex = 0;
   }
 }
+usePhone();
