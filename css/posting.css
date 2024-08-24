@@ -38,11 +38,12 @@ html,body{
   border-bottom: solid 2px #00000014;
   align-items: center;
   z-index: 8;
+  min-width: 320px;
 }
 .left,.right{
   width: fit-content;
   line-height: 50px;
-  margin: 0 15px;
+  margin: 0 10px;
 }
 .center{
   flex: 1;
@@ -200,7 +201,7 @@ a{
   top: 5px;
 }
 .post_message{
-  margin: 10px 0;
+  margin: 10px 0 10px 45px;
 }
 .post_message a{
   color: #2ca9eb;
@@ -279,15 +280,14 @@ textarea:focus{
   font-size: 14px;
   color: #333;
 }
-.userColumn::before{
-  content: "";
-  display: block;
+.avatar{
   background-size: 50px 50px;
-  background-image: url("https://www.tianya.im/avatar/6/63/18310/100");
+  background-image: url("https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png");
   width: 50px;
   height: 50px;
   float: left;
   margin-right: 10px;
+  border-radius: 50%;
 }
 .userColumn{
   border-bottom: #777 2px solid;
@@ -328,16 +328,26 @@ body{font-size: 14px;}
 .left,.right{line-height: 40px;}
 .sousuokuang{height: 20px;}
 #search{line-height: 20px;}
+.left,.right{
+  line-height: 40px;
+  margin: 0 6px;
+}
+.center{margin: 0;}
 .wrapper{
   width: 100%;
   overflow-x: hidden;
+  min-height: calc(100% - 40px);
 }
 .content{
   width: 100%;
 }
+#posting,.post,#reply{
+  max-width: calc(100% - 20px);
+}
 .dashboard{
-  transform: translateX(0%);
+  transform: translateX(100%);
   transition: 0.5s;
-  z-index: 10;
+  z-index: 9;
+  background: #fff;
 }
 }
