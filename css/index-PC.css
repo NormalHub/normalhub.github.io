@@ -239,8 +239,17 @@ a{
   color: #fff;
   text-align: center;
   font-size: 14px;
+  margin-bottom: 10px;
 }
-.postButton:hover{
+#loginButton{
+  cursor: pointer;
+  padding: 5px 10px;
+  background: #ccc;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+}
+.postButton:hover,#loginButton:hover{
   background: #bbb;
 }
 textarea:focus{
