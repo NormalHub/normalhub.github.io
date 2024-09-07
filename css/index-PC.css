@@ -286,6 +286,40 @@ textarea:focus{
   float: left;
   margin-right: 10px;
 }
+.lv0,.lv1::after,.lv2::after,.lv3::after,.lv4::after,.lv5::after,.lv6::after{
+  padding: 0 5px;
+  margin-left: 5px;
+  font-size: 11px;
+  color: #fff;
+}
+.lv0::after{
+  content: 'LV0';
+  background: #ccc;
+}
+.lv1::after{
+  content: 'LV1';
+  background: #91e6ff;
+}
+.lv2::after{
+  content: 'LV2';
+  background: #4daeff;
+}
+.lv3::after{
+  content: 'LV3';
+  background: #cddc39;
+}
+.lv4::after{
+  content: 'LV4';
+  background: #f8b523;
+}
+.lv5::after{
+  content: 'LV5';
+  background: #ff6423;
+}
+.lv6::after{
+  content: 'LV6';
+  background: #f21212;
+}
 .userColumn,.profile{
   border-bottom: #777 2px solid;
   margin-bottom: 10px;
