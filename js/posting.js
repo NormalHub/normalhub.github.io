@@ -60,25 +60,23 @@ var userNameDom = document.getElementById("userName");
 var part_1 = document.getElementsByClassName("dashboard_part_1")[0];
 if(isLoggedIn){
   userNameDom.innerHTML = `<a href="space.html" target="_blank">${userName}</a>`;
-  var {data,error} = await supabase.from('user').select('password,post,support,avatar,intro').eq('id',u_id);
-  if(password != data[0].password){
+  const {data} = await supabase.rpc('check_password',{uid:Number(u_id),password:password});
+  const avatar = (data.avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${u_id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
+  if(data === null){
     alert("密码错误！请重新登录");
+    isLoggedIn=false;
     cookieDelete("userName");
     cookieDelete("password");
     cookieDelete("id");
     setTimeout(function(){location.reload();},2500)
   }
-  console.log(`已登录！name：${userName}，id：${u_id}，password：${password}，密码是否正确：${password==data[0].password}`);
-}else{
-  document.getElementsByClassName("postButton")[0].style.cursor = "not-allowed";
-  console.log("求求你注册一个账号吧~ o(TﾍTo)");
 }
-
 function getPoster(u_name,post,support,avatar,intro){
   if(intro == null){intro = "还没有简介呢";}
   part_1.innerHTML = `<div class="userColumn"><div class="avatar" style="background-image:url(${avatar})"></div><div><b>${u_name}</b><p>${intro}</p></div></div>
     <div class="profile"><div><b>${post}</b><p>帖子</p></div><div><b>${support}</b><p>获赞</p></div></div>`;
 }
+const lvlist = [0,100,555,1450,5834,10000,24096];
 var emojiArray = ["angry","anguished","anxious","beaming_smiling_eyes","broken_heart","clown","confused","disappointed","expressionless","blowing_a_kiss","exhaling","holding_back_tears","savoring_food","screaming_in_fear","vomiting","hand_over_mouth","head-bandage","open_eyes_hand_over_mouth","peeking_eye","raised_eyebrow","rolling_eyes","spiral_eyes","steam_from_nose","symbols_on_mouth","tears_of_joy","fearful","flushed","frowning","ghost","grimacing","grinning_smiling_eyes_1","grinning_sweat","hear-no-evil_monkey_1","hot","hundred_points","kissing_smiling_eyes","knocked-out","loudly_crying","money-mouth","nerd","neutral","persevering","pile_of_poo","pleading_1","pouting","red_heart_1","relieved","rolling_on_the_floor_laughing","sad_but_relieved","saluting","see-no-evil_monkey","shushing","sleeping","slightly_frowning","smiling_heart-eyes","smiling_smiling_eyes","smiling_sunglasses","smirking","speak-no-evil_monkey","squinting_tongue","sweat_droplets","thinking","unamused","upside-down","winking","worried","yawning","zany"];
 var posting_supported = cookieGet("support");
 if(posting_supported!=undefined){posting_supported = JSON.parse(posting_supported);}else{posting_supported=[]}
@@ -93,7 +91,8 @@ async function getPosting(){
     pv = data[0].pv+1,
     time = timeConverter(time_ms);
   var {error} = await supabase.from('posting').update({pv: pv}).eq('t',posting_id);//浏览数+1
-  var {data} = await supabase.from('user').select('u_name,post,support,avatar,intro').eq("id",id);//将uid和uname关联
+  var {data} = await supabase.from('user').select('u_name,post,support,avatar,intro,exp').eq("id",id);//将uid和uname关联
+  for(var t=6;t>-1;t--){if(lvlist[t]<data[0].exp){var lv = t+1;break;}}
   var avatar = (data[0].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
   var user = data[0].u_name;
   getPoster(user,data[0].post,data[0].support,avatar,data[0].intro);
@@ -102,7 +101,7 @@ async function getPosting(){
     content = content.replace(regex,`<div class="post_emoji" style="background-position-x: ${(each-1)*-20}px;"></div>`);
   }
   posting.innerHTML = `<div class="post_avatar" style="background-image:url(${avatar})"></div>
-  <div class='post_header'><b>${user}</b><small>${time}</small></div>
+  <div class='post_header'><b class="lv${lv}">${user}</b><small>${time}</small></div>
   <div class="post_message">${content}</div>
   <div class="post_actions"><a href="javascript:void(0);" id="${time_ms}" class="support_n" name="${id}">${support}</a><a href="javascrpit:void(0);" class="reply">${reply}</a><a class="pv">${pv}</a></div>`;
   
@@ -146,7 +145,7 @@ async function getReply(){
   sortArray(dArray,order);
   var {data} = await supabase.from('discuss').select('*');
   var discuss_array = data;
-  var {data} = await supabase.from('user').select('u_name,id,avatar');
+  var {data} = await supabase.from('user').select('u_name,id,avatar,exp');
   sortArray(data,{key:"id",order:true});
   reply.innerHTML = `<div class="text_reply">回复：</div>`;
   for(var i=dArray.length;i--;i>0){
@@ -158,6 +157,7 @@ async function getReply(){
       time = timeConverter(time_ms);
     var avatar = (data[id].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
     var name = data[id].u_name;
+    for(var t=6;t>-1;t--){if(lvlist[t]<data[id].exp){var lv = t+1;break;}}
     for(var each=emojiArray.length;each>0;each--){
       var regex = new RegExp(`:${emojiArray[each-1]}:`, 'g');
       content = content.replace(regex,`<div class="post_emoji" style="background-position-x: ${(each-1)*-20}px;"></div>`);
@@ -165,7 +165,7 @@ async function getReply(){
     var postingDiv = document.createElement("div");
     postingDiv.classList.add("reply_div");
     postingDiv.innerHTML = `<div class="post_avatar" style="background-image: url(${avatar})"></div>
-    <div class='post_header'><b>${name}</b><small>${time}</small></div>
+    <div class='post_header'><b class="lv${lv}">${name}</b><small>${time}</small></div>
     <div class="post_message">${content}</div>
     <div class="post_actions"><a href="javascript:void(0);" id="${time_ms}" class="support_n" name="${id}">${support}</a><a href="javascript:void(0)" class="discuss" name="${name}">@</a><a></a></div>`;
     reply.appendChild(postingDiv);
@@ -217,6 +217,7 @@ getReply();
 var textarea = document.getElementById("post_value");
 var isPosted = false;
 document.getElementById("post").onclick = async function send(){
+  if(!isLoggedIn){alert("登录后才能回复");return;}
   var content = textarea.value;
   var notNull = /[^ ]/g;
   if(content==""||!notNull.test(content)){alert("内容不能为空");return;}
@@ -226,10 +227,10 @@ document.getElementById("post").onclick = async function send(){
     var {error} = await supabase.from('discuss').insert({u:u_id,c:content,at:discuss_at_id});
   }else{
     var {error} = await supabase.from('reply').insert({u:u_id,c:content,t:time,at:posting_id});
+    var {data,error} = await supabase.from('user').select('post').eq('id',u_id);//只有在post下回复，user的post数才+1
+    var {error} = await supabase.from('user').update({post: (data[0].post+1)}).eq('id',u_id);
   }
   var {error} = await supabase.from('posting').update({r: Number(document.getElementsByClassName("reply")[0].innerHTML)+1}).eq('t',posting_id);
-  var {data,error} = await supabase.from('user').select('post').eq('id',u_id);//user的post数+1
-  var {error} = await supabase.from('user').update({post: (data[0].post+1)}).eq('id',u_id);
   alert("已发送");
   
   order = {key: "t",order: true}

@@ -50,16 +50,16 @@ var userName = cookieGet("userName");
 const password = cookieGet("password");
 const u_id = cookieGet("id");
 const isLoggedIn = !(userName==null||userName==undefined);
-const isLogin = cookieGet("isLogin")
+const isLoginToday = cookieGet("isLoginToday")
 
 var userNameDom = document.getElementById("userName");
 var part_1 = document.getElementsByClassName("dashboard_part_1")[0];
+const lvlist = [0,100,555,1450,5834,10000,24096];
 if(isLoggedIn){
   userNameDom.innerHTML = `<a href="space.html" target="_blank">${userName}</a>`;
-  const {data,error} = await supabase.from('user').select('post,support,avatar,intro').eq('id',u_id);
-  const avatar = (data[0].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${u_id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
-  const check_password = await supabase.rpc('check_password',{input_u_name:userName,input_password:password})
-  if(!check_password.data){
+  const {data} = await supabase.rpc('check_password',{uid:Number(u_id),password:password});
+  const avatar = (data.avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${u_id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
+  if(data === null){
     alert("密码错误！请重新登录");
     isLoggedIn=false;
     cookieDelete("userName");
@@ -67,48 +67,46 @@ if(isLoggedIn){
     cookieDelete("id");
     setTimeout(function(){location.reload();},2500)
   }
-  if(data[0].intro == null){data[0].intro = "还没有简介呢";}
-  part_1.innerHTML = `<div class="userColumn"><div class="avatar" style="background-image:url(${avatar})"></div><div><b>${userName}</b><p>${data[0].intro}</p></div></div>
-    <div class="profile"><div><b>${data[0].post}</b><p>帖子</p></div><div><b>${data[0].support}</b><p>获赞</p></div></div>
-    <div class="postButton">发帖</div><div id="loginButton">签到</div>
-  `;
+  if(data.intro == null){data.intro = "还没有简介呢";}
+  for(var t=6;t>-1;t--){if(lvlist[t]<data.exp){var lv = t+1;break;}}
+  part_1.innerHTML = `<div class="userColumn"><div class="avatar" style="background-image:url(${avatar})"></div><div><b class="lv${lv}">${userName}</b><p>${data.intro}</p></div></div>
+    <div class="profile"><div><b>${data.post}</b><p>帖子</p></div><div><b>${data.support}</b><p>获赞</p></div></div>
+    <div class="postButton">发帖</div><div id="loginButton">签到</div>`;
 }else{
   document.getElementsByClassName("postButton")[0].style.cursor = "not-allowed";
   document.getElementById("loginButton").style.cursor = "not-allowed";
   console.log("求求你注册一个账号吧~ o(TﾍTo)");
 }
-
 //获取帖子
 var order = {key:"t",order:true};//排序标准默认是时间
 var emojiArray = ["angry","anguished","anxious","beaming_smiling_eyes","broken_heart","clown","confused","disappointed","expressionless","blowing_a_kiss","exhaling","holding_back_tears","savoring_food","screaming_in_fear","vomiting","hand_over_mouth","head-bandage","open_eyes_hand_over_mouth","peeking_eye","raised_eyebrow","rolling_eyes","spiral_eyes","steam_from_nose","symbols_on_mouth","tears_of_joy","fearful","flushed","frowning","ghost","grimacing","grinning_smiling_eyes_1","grinning_sweat","hear-no-evil_monkey_1","hot","hundred_points","kissing_smiling_eyes","knocked-out","loudly_crying","money-mouth","nerd","neutral","persevering","pile_of_poo","pleading_1","pouting","red_heart_1","relieved","rolling_on_the_floor_laughing","sad_but_relieved","saluting","see-no-evil_monkey","shushing","sleeping","slightly_frowning","smiling_heart-eyes","smiling_smiling_eyes","smiling_sunglasses","smirking","speak-no-evil_monkey","squinting_tongue","sweat_droplets","thinking","unamused","upside-down","winking","worried","yawning","zany"];
+var postings = document.getElementById("postings");
 async function getPostings(){
-  var postings = document.getElementById("postings");
+  var {data} = await supabase.rpc('get_post');
   var posting_supported = cookieGet("support");
   if(posting_supported!=undefined){posting_supported = JSON.parse(posting_supported);}else{posting_supported=[]}
-  var {data,error} = await supabase.from('posting').select();
-  var dArray = data;
-  var {data} = await supabase.from('user').select('u_name,id,avatar');//将uid和uname关联
-  sortArray(dArray,order);
-  sortArray(data,{key:"id",order:true});
+  sortArray(data,order);
   postings.innerHTML = "";
-  for(var i=dArray.length;i--;i>0){
-    var time_ms = dArray[i].t,
-      content = dArray[i].c,
-      support = dArray[i].s,
-      reply = dArray[i].r,
-      id = dArray[i].u,
-      pv = dArray[i].PV,
-      time = timeConverter(time_ms);
-    var avatar = (data[id].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
-    var user = data[id].u_name;
+  for(var i=data.length;i--;i>0){
+    var time_ms = data[i].t,
+      content = data[i].c,
+      support = data[i].s,
+      reply = data[i].r,
+      id = data[i].u,
+      pv = data[i].PV,
+      time = timeConverter(time_ms),
+      user = data[i].u_name,
+      exp = data[i].exp;
+    var avatar = (data[i].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
     for(var each=emojiArray.length;each>0;each--){
       var regex = new RegExp(`:${emojiArray[each-1]}:`, 'g');
       content = content.replace(regex,`<div class="post_emoji" style="background-position-x: ${(each-1)*-20}px;"></div>`);
     }
+    for(var t=6;t>-1;t--){if(lvlist[t]<exp){var lv = t+1;break;}}
     var postingDiv = document.createElement("div");
     postingDiv.classList.add("postingdiv");
     postingDiv.innerHTML = `<div class="post_avatar" style="background-image: url(${avatar})"></div>
-    <div class='post-header'><a target="_bank" href="./space.html?u=${user}" style="font-weight: bold;">${user}</a><small>${time}</small></div>
+    <div class='post-header'><a target="_bank" href="./space.html?u=${user}" style="font-weight: bold;" class="lv${lv}">${user}</a><small>${time}</small></div>
     <div class="post_message">${content}</div>
     <div class="post-actions"><a href="javascript:void(0);" id="${time_ms}" class="support_n" name="${id}">${support}</a><a href="./t.html?id=${time_ms}&poster=${id}" target="_blank" class="reply">${reply}</a><a href="./t.html?id=${time_ms}&poster=${id}" target="_blank" class="more">查看详情</a></div>`;
     postings.appendChild(postingDiv);
@@ -172,15 +170,21 @@ document.getElementsByClassName("postButton")[0].onclick = function(){
     if(content==""||!notNull.test(content)){alert("内容不能为空");return;}
     var time = new Date().getTime();
     if(!isPosted){isPosted = true;setTimeout(function(){isPosted = false},3000);}else{return;}//防止用户不小心重复发帖
-    var {error} = await supabase.from('posting').insert({u:u_id,c:content,t:time});
-    alert("已发送");
-    var {data,error} = await supabase.from('user').select('post').eq('id',u_id);//user的post数+1
-    var {error} = await supabase.from('user').update({post: (data[0].post+1)}).eq('id',u_id);
-    
+    const post = await supabase.rpc('create_post',{create_time:time,uid:Number(u_id),content:content});
+    alert("已发送，经验 +25");
     bg.remove();//在页面上显示帖子
-    order = {key: "t",order: true}
-    document.getElementById("order").innerHTML = "新 /热";
-    getPostings();
+    var postingDiv = document.createElement("div");
+    postingDiv.classList.add("postingdiv");
+    postingDiv.innerHTML = `<div class="post_avatar"></div>
+    <div class='post-header'><a target="_bank" href="./space.html?u=${userName}" style="font-weight: bold;">${userName}</a><small>${timeConverter(time)}</small></div>
+    <div class="post_message">${content}</div>
+    <div class="post-actions"><a href="javascript:void(0);" id="${time}" class="support_n" name="${u_id}">0</a><a href="./t.html?id=${time}&poster=${u_id}" target="_blank" class="reply">0</a><a href="./t.html?id=${time}&poster=${u_id}" target="_blank" class="more">查看详情</a></div>`;
+    postings.insertBefore(postingDiv,postings.children[0]);
+    postingDiv.firstChild.style.backgroundImage = document.getElementsByClassName("avatar")[0].style.backgroundImage;
+    postingDiv.style.background = "aliceblue";
+    location = "#postings";
+    this.onclick = null;
+    document.getElementById("emoji").onclick = null;
   }
   document.getElementById("emoji").onclick = function(){
     document.getElementsByClassName("emoji")[0].style.display = "block";
@@ -214,12 +218,14 @@ add_link.onclick = function(){
 */
 //签到
 document.getElementById("loginButton").onclick = debounce(async function login(){
-  if(isLogin){this.innerHTML = "今日已签";return;}
+  if(!isLoggedIn){alert("点击右上角登录后才可以签到");return;}
+  if(isLoginToday){this.innerHTML = "今日已签";return;}
+  const date = new Date(new Date().setHours(0,0,0,0)+86400000).toGMTString();
+  document.cookie= `isLoginToday=y;expires=${date};`;
+  this.innerHTML = "加载中...";
   const login = await supabase.rpc('login',{uid:u_id})
-  const date = new Date(new Date().setHours(0,0,0,0)+115200000).toGMTString();
-  document.cookie= `isLogin=y;expires=${date};`;
   this.innerHTML = login.data;
-  if(login.data == "签到成功"){alert("经验 +20")}
+  if(login.data == "签到成功"){alert("经验 +15")}
 },500)
 
 document.getElementById("order").onclick = function(){

@@ -31,21 +31,31 @@ var u_id = cookieGet("id");
 var isLoggedIn = !(userName==null||userName==undefined);
 var userNameDom = document.getElementById("userName");
 var part_1 = document.getElementsByClassName("part_1")[0];
+const lvlist = [0,100,555,1450,5834,10000,24096];
 if(isLoggedIn && visit == undefined){
   userNameDom.innerHTML = `<a href="space.html" target="_blank">${userName}</a>`;
-  var {data,error} = await supabase.from('user').select('password,exp,post,support,avatar,intro,follow,fans').eq('id',u_id);
-  var avatar = (data[0].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${u_id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
-  if(data[0].intro == null){data[0].intro = "还没有简介呢";}
+  const {data} = await supabase.rpc('check_password',{uid:Number(u_id),password:password});
+  const avatar = (data.avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${u_id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
+  if(data === null){
+    alert("密码错误！请重新登录");
+    isLoggedIn=false;
+    cookieDelete("userName");
+    cookieDelete("password");
+    cookieDelete("id");
+    setTimeout(function(){location.reload();},2500)
+  }
+  if(data.intro == null){data.intro = "还没有简介呢";}
   var fans = [];
-  if(data[0].fans != null){fans = data[0].fans.split(",");}
+  if(data.fans != null){fans = data.fans.split(",");}
   var follow = [];
-  if(data[0].follow != null){follow = data[0].follow.split(",");}
+  if(data.follow != null){follow = data.follow.split(",");}
+  for(var t=6;t>-1;t--){if(lvlist[t]<data.exp){var lv = t+1;break;}}
   part_1.innerHTML = `
   <div id="edit">编辑</div>
-  <div class="userColumn"><div class="avatar" style="background-image:url(${avatar})"></div><div><b>${userName}</b><p>${data[0].intro}</p></div></div>
+  <div class="userColumn"><div class="avatar" style="background-image:url(${avatar})"></div><div><b class="lv${lv}">${userName}</b><p>${data.intro}</p></div></div>
   <div class="profile">
-    <div><b>${data[0].post}</b><p>帖子</p></div>
-    <div><b>${data[0].support}</b><p>获赞</p></div>
+    <div><b>${data.post}</b><p>帖子</p></div>
+    <div><b>${data.support}</b><p>获赞</p></div>
     <div><b>${follow.length}</b><p>关注</p></div>
     <div><b>${fans.length}</b><p>粉丝</p></div>
   </div>`;
@@ -60,7 +70,6 @@ if(isLoggedIn && visit == undefined){
       bg.onclick = null;
     }
   }
-  
   var edit = document.getElementById("edit");
   var croppedImage;
   edit.onclick = async function(){
@@ -201,29 +210,17 @@ if(isLoggedIn && visit == undefined){
     if(u.length>7){alert("昵称长度不能超过7个字符");return;}
     var p = document.getElementById("password_input").value;
     if(p=="" || p.indexOf(" ")!=-1){alert("错误：密码为空/含有空格");return;}
-    if(p.length!=6){alert("密码长度必须为6个字符");return;}
-    var {data,error} = await supabase.from('user').select('id');
-    var id = data.length;
-    var { error } = await supabase.from('user').insert({u_name: u,password: p,id: id})
-    if(error){
-      var { data, error } = await supabase.from('user').select('password,id').eq('u_name',u)
-      if(p==data[0].password){
-        var id = data[0].id;
-        cookieSet(`userName=${u};`,365*24*60*60000);
-        cookieSet(`password=${p};`,365*24*60*60000);
-        cookieSet(`id=${id};`,365*24*60*60000);
-        alert("登录成功！");
-        setTimeout(function(){location.reload();},1500)
-        return;
-      }
-      alert(`注册/登录失败：密码错误 / 用户名“${u}”已存在`);
-      return;
+    if(p.length!=6){alert("密码必须为6个数字");return;}
+    const {data} = await supabase.rpc("account",{n:u,p:p});
+    if(data.isright){
+      cookieSet(`userName=${u};`,365*24*60*60000);
+      cookieSet(`password=${p};`,365*24*60*60000);
+      cookieSet(`id=${data.uid};`,365*24*60*60000);
+      alert("注册/登录成功！");
+      setTimeout(function(){location.reload();},1500)
+    }else{
+      alert("密码或账号错误/昵称已存在")
     }
-    cookieSet(`userName=${u};`,365*24*60*60000);
-    cookieSet(`password=${p};`,365*24*60*60000);
-    cookieSet(`id=${id};`,365*24*60*60000);
-    alert("注册成功！");
-    setTimeout(function(){location.reload();},1500)
   }
 }else if(visit != undefined){
   userNameDom.innerHTML = `<a href="space.html" target="_blank">${userName}</a>`;
@@ -235,9 +232,10 @@ if(isLoggedIn && visit == undefined){
   if(data[0].fans != null){fans = data[0].fans.split(",");}
   var follow = [];
   if(data[0].follow != null){follow = data[0].follow.split(",");}
+  for(var t=6;t>-1;t--){if(lvlist[t]<data[0].exp){var lv = t+1;break;}}
   part_1.innerHTML = `
   <div class="follow_buttom">关注</div>
-  <div class="userColumn"><div class="avatar" style="background-image:url(${avatar});"></div><div><b>${visit}</b><p>${data[0].intro}</p></div></div>
+  <div class="userColumn"><div class="avatar" style="background-image:url(${avatar});"></div><div><b class="lv${lv}">${visit}</b><p>${data[0].intro}</p></div></div>
   <div class="profile">
     <div><b>${data[0].post}</b><p>帖子</p></div>
     <div><b>${data[0].support}</b><p>获赞</p></div>
