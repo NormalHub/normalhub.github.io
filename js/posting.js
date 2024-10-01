@@ -4,62 +4,26 @@ var SupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImV4
 const supabase = createClient(SupabaseUrl, SupabaseKey);
 import {convertToHTML} from "./markdown.js";
 //多次调用
-function timeConverter(time_number){
-  var d = new Date();
-  d.setTime(Number(time_number));
-  var year = d.getFullYear();
-  var month = d.getMonth()+1;
-  var day = d.getDate();
-  var hour = d.getHours();
-  var minute = d.getMinutes();
-  if(month<10){month = "0" + month;}
-  if(day<10){day = "0" + day;}
-  if(hour<10){hour = "0" + hour;}
-  if(minute<10){minute = "0" + minute;}
-  var time_string = year+"/"+month+"/"+day+" "+hour+":"+minute;
-  return time_string;
-}
-function alert(c){
-  var alertDiv = document.createElement("div");
-  alertDiv.className = "alert";
-  alertDiv.innerHTML = c;
-  document.body.appendChild(alertDiv);
-  setTimeout(function(){alertDiv.remove();},3000)
-}
-function cookieSet(content,expires_time){
-  var date = new Date();
-  date.setTime(date.getTime()+expires_time);
-  var expires="expires="+date.toGMTString()+";";
-  document.cookie=content+expires;
-  console.log(`已成功设置cookie：${content}`)
-}
-function cookieGet(keyword){
-  var cookies = decodeURI(document.cookie).split("; ");
-  for(var t=cookies.length;t--;t>0){if(cookies[t].indexOf(keyword)!=-1){return cookies[t].split("=")[1];}}
-}
-function cookieDelete(keyword){
-  document.cookie = `${keyword}=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-}
-function sortArray(array, bol) {
-  return array.sort((a, b) => {
-  const { key, order } = bol, valueA = a[key], valueB = b[key];
-  return valueA < valueB ? (order ? -1 : 1) : valueA > valueB ? (order ? 1 : -1) : 0;
-  })
-}
+function timeConverter(time_number){var d = new Date(Number(time_number));var year = d.getFullYear();var month = d.getMonth()+1;var day = d.getDate();var hour = d.getHours();var minute = d.getMinutes();if(month<10){month = "0" + month;}if(day<10){day = "0" + day;}if(hour<10){hour = "0" + hour;}if(minute<10){minute = "0" + minute;}var time_string = year+"/"+month+"/"+day+" "+hour+":"+minute;return time_string;}
+function alert(c){var alertDiv = document.createElement("div");alertDiv.className = "alert";alertDiv.innerHTML = c;document.body.appendChild(alertDiv);setTimeout(function(){alertDiv.remove();},3000);}
+function cookieSet(content,expires_time){var date = new Date();date.setTime(date.getTime()+expires_time);var expires="expires="+date.toGMTString()+";";document.cookie=content+expires;}
+function cookieGet(keyword){var cookies = decodeURI(document.cookie).split("; ");for(var t=cookies.length;t--;t>0){if(cookies[t].indexOf(keyword)!=-1){return cookies[t].split("=")[1];}};}
+function cookieDelete(keyword){document.cookie = `${keyword}=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;}
+function sortArray(array, bol){return array.sort((a, b)=>{const {key,order} = bol,valueA = a[key], valueB = b[key];return valueA < valueB ? (order ? -1 : 1) : valueA > valueB ? (order ? 1 : -1) : 0;})}
 //全局变量
+if(!window.location.search){location.href="www.kingdinner.top";}
 var cookies = decodeURI(document.cookie).split("; ");
 var posting_id = window.location.search.split("&")[0].split("=")[1];
 var poster_id = window.location.search.split("&")[1].split("=")[1];
 var userName = cookieGet("userName");
 var password = cookieGet("password");
 var u_id = cookieGet("id");
-var isLoggedIn = !(userName==null||userName==undefined);
+var isLoggedIn = !!(userName&&password&&u_id);
+const isLoginToday = cookieGet("isLoginToday");
 
-cookieDelete("user_name")//删除曾经已游客名称登录的cookie
-var userNameDom = document.getElementById("userName");
-var part_1 = document.getElementsByClassName("dashboard_part_1")[0];
+var useravatarDom = document.getElementsByClassName("userAvatar")[0];
+const lvlist = [0,100,555,1450,5834,10000,24096];
 if(isLoggedIn){
-  userNameDom.innerHTML = `<a href="space.html" target="_blank">${userName}</a>`;
   const {data} = await supabase.rpc('check_password',{uid:Number(u_id),password:password});
   const avatar = (data.avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${u_id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
   if(data === null){
@@ -69,6 +33,42 @@ if(isLoggedIn){
     cookieDelete("password");
     cookieDelete("id");
     setTimeout(function(){location.reload();},2500)
+  }
+  if(data.intro == null){data.intro = "还没有简介呢";}
+  useravatarDom.innerHTML = '';
+  useravatarDom.style.backgroundImage = 'url('+avatar+')';
+  useravatarDom.style.backgroundColor = '#fff';
+  for(var t=6;t>-1;t--){if(lvlist[t]<data.exp){var lv = t+1;break;}}
+  if(document.body.offsetWidth <= 600){
+    useravatarDom.onclick = function(){
+      var div = document.createElement("div");
+      div.className = "bg";
+      div.innerHTML = `<div class="lv${lv}"><b>${userName}</b></div><progress value="${data.exp}" max="${lvlist[lv]}"></progress>
+      <p id="loginButton">☐ 每日签到</p>
+      <div class="userBoard"><a href="space.html" target="_blank">⌂ 个人中心</a>
+      <a href="message.html" target="_blank">✉ 消息通知</a>
+      <a href="space.html" target="_blank">☰ 帖子管理</a>
+      <a href="javascript:void(0);" onclick="document.cookie='userName=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';location.reload();">↲ 退出登录</a></div>`;
+      document.body.appendChild(div);
+      div.style.background = "none";
+      div.onclick = function(){this.remove();}
+    }
+  }else{
+    useravatarDom.onmouseover = function(){
+      var t;
+      clearTimeout(t);
+      var div = document.createElement("div");
+      div.className = "userBoard";
+      div.innerHTML = `<div class="lv${lv}"><b>${userName}</b></div><progress value="${data.exp}" max="${lvlist[lv]}"></progress>
+      <p id="loginButton">☐ 每日签到</p>
+      <a href="space.html" target="_blank">⌂ 个人中心</a>
+      <a href="message.html" target="_blank">✉ 消息通知</a>
+      <a href="space.html" target="_blank">☰ 帖子管理</a>
+      <a href="javascript:void(0);" onclick="document.cookie='userName=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';location.reload();">↲ 退出登录</a>`;
+      document.body.appendChild(div);
+      document.getElementById("loginButton").onclick = login;
+      useravatarDom.onmouseout = function(){t=setTimeout(function(){div.remove();this.onmouseout = null;},500);div.onmouseover = function(){clearTimeout(t);div.onmouseout= function(){t = setTimeout(function(){div.remove();this.onmouseout = null;this.onmouseover = null;},500)}}}
+    }
   }
 }
 function getPoster(u_name,post,support,avatar,intro){
@@ -88,9 +88,7 @@ async function getPosting(){
     support = data[0].s,
     reply = data[0].r,
     id = data[0].u,
-    pv = data[0].pv+1,
     time = timeConverter(time_ms);
-  var {error} = await supabase.from('posting').update({pv: pv}).eq('t',posting_id);//浏览数+1
   var {data} = await supabase.from('user').select('u_name,post,support,avatar,intro,exp').eq("id",id);//将uid和uname关联
   for(var t=6;t>-1;t--){if(lvlist[t]<data[0].exp){var lv = t+1;break;}}
   var avatar = (data[0].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
@@ -103,7 +101,7 @@ async function getPosting(){
   posting.innerHTML = `<div class="post_avatar" style="background-image:url(${avatar})"></div>
   <div class='post_header'><b class="lv${lv}">${user}</b><small>${time}</small></div>
   <div class="post_message">${content}</div>
-  <div class="post_actions"><a href="javascript:void(0);" id="${time_ms}" class="support_n" name="${id}">${support}</a><a href="javascrpit:void(0);" class="reply">${reply}</a><a class="pv">${pv}</a></div>`;
+  <div class="post_actions"><span id="${time_ms}" class="support_n" name="${id}">${support}</span><span class="reply">${reply}</span><span id="more">≡</span></div>`;
   
   for(var t=0;t<posting_supported.length;t++){
     if(posting_supported[t] == time_ms){document.getElementById(time_ms).className="support_y";}
@@ -132,9 +130,49 @@ async function getPosting(){
     discuss_at_id = undefined;
     document.getElementById("post_value").placeholder = `发布一条评论吧`;
   }
+  document.getElementById("more").onclick = function(){
+    if(document.getElementById("moremenu")){return;}
+    let div = document.createElement("div");
+    div.id = "moremenu";
+    document.getElementsByClassName("post_actions")[0].appendChild(div);
+    var b=false;
+    document.body.addEventListener('click', function handleClick(){if(b){div.remove();document.body.removeEventListener('click',handleClick);}else{b = true}});
+    div.innerHTML = "<div id='share'>转发</div><div id='report'>举报</div><div id='delete'>删除</div>";
+    document.getElementById('share').onclick = function(){if(navigator.clipboard){navigator.clipboard.writeText(location.href);alert("网址复制成功")}else{alert("浏览器不支持！可以手动复制地址栏的网址")}}
+    document.getElementById('report').onclick = report;
+    document.getElementById('delete').onclick = async function(){if(isLoggedIn){const {data} = await supabase.rpc('delete_post',{uid:Number(u_id),upassword:password,pid:posting_id});if(data.indexOf("success")!=-1){alert("删除成功");setTimeout("location.href='www.kingdinner.top'",1500)};}else{alert("error：未登录");}}
+  }
+  /*诈骗/钓鱼链接
+  不实信息
+  人身攻击
+  侵犯隐私
+  引战
+  刷屏
+  无关话题/水贴
+  广告
+  其它*/
 }
 getPosting();
-
+function report(){
+  var bg = document.createElement('div');
+  bg.className = 'bg';
+  document.body.appendChild(bg);
+  bg.innerHTML = `<div class="report"><p>帖子：<input style="width:16em" value="${posting_id}" disabled></p>
+    <p>类型：<br><input type="radio" name="report" value="1">诈骗/钓鱼链接<br><input type="radio" name="report" value="2">不实信息<br><input type="radio" name="report" value="3">人身攻击<br><input type="radio" name="report" value="4">侵犯隐私<br><input type="radio" name="report" value="5">引战<br><input type="radio" name="report" value="6">刷屏<br><input type="radio" name="report" value="7">无关话题/水贴<br><input type="radio" name="report" value="8">广告<br><input type="radio" name="report" value="9">其它</p>
+    <p>详情：<input id="description" text="text"></p><button id="report_submit">提交</button><button style="margin:0 5px" id="cancel">取消</button></div>`;
+  document.getElementById("report_submit").onclick = async function(){
+    const radio = document.getElementsByName("report");
+    let type = null;
+    for(var t=radio.length;t>0;t--){if(radio[t-1].checked){type=radio[t-1].value;break;}}
+    if(!type){alert("请选择类型");return;}
+    const description = document.getElementById("description").value;
+    if(type==9&&!description){alert("必须填写详情");return;}
+    const {error} = await supabase.from('report').insert({url:posting_id,type:type,description:description,reporter:u_id});
+    bg.remove();
+  }
+  var cancel = document.getElementById("cancel");
+  cancel.onclick = function(){bg.remove();}
+}
 var order = {key:"t",order:true};//排序标准默认是时间
 var discuss_at_id;//回复的对象
 async function getReply(){
@@ -263,7 +301,7 @@ document.getElementById("order").onclick = function(){
   order = (order.key=="t" && order.order==true) ? {key:"s",order:true} : {key:"t",order:true};
   getReply();
 }
-document.getElementById("style").onclick = function(){alert("还在开发中")}
+document.getElementById("style").onclick = function(){alert("还在开发中");}
 
 //百度统计
 if(location.href.indexOf("www.kingdinner.top")!=-1){
@@ -276,55 +314,3 @@ if(location.href.indexOf("www.kingdinner.top")!=-1){
   })();
   console.log("网站统计已开启");
 }
-//防抖
-function debounce(func, delay) {
-  let timeout;
-  return function(...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {func.apply(this, args);}, delay);
-  };
-}
-window.onresize = debounce(usePhone,500);
-function usePhone(){
-  var dashboard = document.getElementsByClassName("dashboard")[0].style;
-  if(document.body.offsetWidth <= 600){
-    var bool = false;//默认没有左滑打开侧边栏
-    document.body.ontouchstart = function(){
-      var startX = event.targetTouches[0].pageX,startY = event.targetTouches[0].pageY;
-      var endX,endY;
-      document.body.ontouchmove = function(){endX = event.targetTouches[0].pageX;endY = event.targetTouches[0].pageY;}
-      document.body.ontouchend = function(){
-        var posX = endX-startX,posY = endY-startY;
-        if(posY > 100 && Math.abs(posX) < Math.abs(posY)){}//下拉刷新页面
-        if(posX > 100 && Math.abs(posX) > Math.abs(posY)){
-          //右滑
-        }else if(posX <-100 && Math.abs(posX) > Math.abs(posY)){
-          //左滑出现用户栏
-          if(bool == true){return;}
-          bool = true;
-          dashboard.transform = "translateX(-100%)";
-          var div = document.createElement("div");
-          div.className = "bg";
-          div.style.zIndex = 8;
-          dashboard.zIndex = 9;
-          div.onclick = function(){
-            bool = false;
-            dashboard.transform = "translateX(100%)";
-            div.onclick = null;
-            div.remove();
-            dashboard.zIndex = 0;
-          }
-          document.body.appendChild(div);
-        }
-        //解绑事件
-        document.body.ontouchmove = null;
-        document.body.ontouchend = null;
-      }
-    }
-  }else if(dashboard.transform == "translateX(100%)"){
-    document.body.ontouchstart = null;
-    dashboard.transform = "translateX(0%)";
-    dashboard.zIndex = 0;
-  }
-}
-usePhone();

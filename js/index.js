@@ -4,59 +4,22 @@ var SupabaseUrl = "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com";
 var SupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImV4cCI6MzI4ODM0Njc1NywiaWF0IjoxNzExNTQ2NzU3LCJpc3MiOiJzdXBhYmFzZSJ9.iee2MqZMWv-d3mRWC0YPdaganE9y58EEcw3xEh4aNk8";
 const supabase = createClient(SupabaseUrl, SupabaseKey);
 //重复调用的函数
-function timeConverter(time_number){
-  var d = new Date();
-  d.setTime(Number(time_number));
-  var year = d.getFullYear();
-  var month = d.getMonth()+1;
-  var day = d.getDate();
-  var hour = d.getHours();
-  var minute = d.getMinutes();
-  if(month<10){month = "0" + month;}
-  if(day<10){day = "0" + day;}
-  if(hour<10){hour = "0" + hour;}
-  if(minute<10){minute = "0" + minute;}
-  var time_string = year+"/"+month+"/"+day+" "+hour+":"+minute;
-  return time_string;
-}
-function alert(c){
-  var alertDiv = document.createElement("div");
-  alertDiv.className = "alert";
-  alertDiv.innerHTML = c;
-  document.body.appendChild(alertDiv);
-  setTimeout(function(){alertDiv.remove();},3000)
-}
-function cookieSet(content,expires_time){
-  var date = new Date();
-  date.setTime(date.getTime()+expires_time*86400000);
-  var expires="expires="+date.toGMTString()+";";
-  document.cookie=content+expires;
-  console.log(`已成功设置cookie：${content}`)
-}
-function cookieGet(keyword){
-  var cookies = decodeURI(document.cookie).split("; ");
-  for(var t=cookies.length;t--;t>0){if(cookies[t].indexOf(keyword)!=-1){return cookies[t].split("=")[1];}}
-}
-function cookieDelete(keyword){
-  document.cookie = `${keyword}=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-}
-function sortArray(array, bol) {
-  return array.sort((a, b) => {
-  const { key, order } = bol, valueA = a[key], valueB = b[key];
-  return valueA < valueB ? (order ? -1 : 1) : valueA > valueB ? (order ? 1 : -1) : 0;
-  })
-}
+function timeConverter(time_number){var d = new Date(Number(time_number));var year = d.getFullYear();var month = d.getMonth()+1;var day = d.getDate();var hour = d.getHours();var minute = d.getMinutes();if(month<10){month = "0" + month;}if(day<10){day = "0" + day;}if(hour<10){hour = "0" + hour;}if(minute<10){minute = "0" + minute;}var time_string = year+"/"+month+"/"+day+" "+hour+":"+minute;return time_string;}
+function alert(c){var alertDiv = document.createElement("div");alertDiv.className = "alert";alertDiv.innerHTML = c;document.body.appendChild(alertDiv);setTimeout(function(){alertDiv.remove();},3000)}
+function cookieSet(content,expires_time){var date = new Date();date.setTime(date.getTime()+expires_time*86400000);var expires="expires="+date.toGMTString()+";";document.cookie=content+expires;}
+function cookieGet(keyword){var cookies = decodeURI(document.cookie).split("; ");for(var t=cookies.length;t--;t>0){if(cookies[t].indexOf(keyword)!=-1){return cookies[t].split("=")[1];}}}
+function cookieDelete(keyword){document.cookie = `${keyword}=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;}
+function sortArray(array, bol){return array.sort((a, b)=>{const { key, order } = bol, valueA = a[key], valueB = b[key];return valueA < valueB ? (order ? -1 : 1) : valueA > valueB ? (order ? 1 : -1) : 0;});}
+
 var userName = cookieGet("userName");
 const password = cookieGet("password");
 const u_id = cookieGet("id");
-const isLoggedIn = !(userName==null||userName==undefined);
-const isLoginToday = cookieGet("isLoginToday")
+const isLoggedIn = !!(userName&&password&&u_id);
+const isLoginToday = cookieGet("isLoginToday");
 
-var userNameDom = document.getElementById("userName");
-var part_1 = document.getElementsByClassName("dashboard_part_1")[0];
+var useravatarDom = document.getElementsByClassName("userAvatar")[0];
 const lvlist = [0,100,555,1450,5834,10000,24096];
 if(isLoggedIn){
-  userNameDom.innerHTML = `<a href="space.html" target="_blank">${userName}</a>`;
   const {data} = await supabase.rpc('check_password',{uid:Number(u_id),password:password});
   const avatar = (data.avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${u_id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
   if(data === null){
@@ -68,14 +31,43 @@ if(isLoggedIn){
     setTimeout(function(){location.reload();},2500)
   }
   if(data.intro == null){data.intro = "还没有简介呢";}
+  useravatarDom.innerHTML = '';
+  useravatarDom.style.backgroundImage = 'url('+avatar+')';
+  useravatarDom.style.backgroundColor = '#fff';
   for(var t=6;t>-1;t--){if(lvlist[t]<data.exp){var lv = t+1;break;}}
-  part_1.innerHTML = `<div class="userColumn"><div class="avatar" style="background-image:url(${avatar})"></div><div><b class="lv${lv}">${userName}</b><p>${data.intro}</p></div></div>
-    <div class="profile"><div><b>${data.post}</b><p>帖子</p></div><div><b>${data.support}</b><p>获赞</p></div></div>
-    <div class="postButton">发帖</div><div id="loginButton">签到</div>`;
+  if(document.body.offsetWidth <= 600){
+    useravatarDom.onclick = function(){
+      var div = document.createElement("div");
+      div.className = "bg";
+      div.innerHTML = `<div class="lv${lv}"><b>${userName}</b></div><progress value="${data.exp}" max="${lvlist[lv]}"></progress>
+      <p id="loginButton">☐ 每日签到</p>
+      <div class="userBoard"><a href="space.html" target="_blank">⌂ 个人中心</a>
+      <a href="message.html" target="_blank">✉ 消息通知</a>
+      <a href="space.html" target="_blank">☰ 帖子管理</a>
+      <a href="javascript:void(0);" onclick="document.cookie='userName=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';location.reload();">↲ 退出登录</a></div>`;
+      document.body.appendChild(div);
+      div.style.background = "none";
+      div.onclick = function(){this.remove();}
+    }
+  }else{
+    useravatarDom.onmouseover = function(){
+      var t;
+      clearTimeout(t);
+      var div = document.createElement("div");
+      div.className = "userBoard";
+      div.innerHTML = `<div class="lv${lv}"><b>${userName}</b></div><progress value="${data.exp}" max="${lvlist[lv]}"></progress>
+      <p id="loginButton">☐ 每日签到</p>
+      <a href="space.html" target="_blank">⌂ 个人中心</a>
+      <a href="message.html" target="_blank">✉ 消息通知</a>
+      <a href="space.html" target="_blank">☰ 帖子管理</a>
+      <a href="javascript:void(0);" onclick="document.cookie='userName=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';location.reload();">↲ 退出登录</a>`;
+      document.body.appendChild(div);
+      document.getElementById("loginButton").onclick = login;
+      useravatarDom.onmouseout = function(){t=setTimeout(function(){div.remove();this.onmouseout = null;},500);div.onmouseover = function(){clearTimeout(t);div.onmouseout= function(){t = setTimeout(function(){div.remove();this.onmouseout = null;this.onmouseover = null;},500)}}}
+    }
+  }
 }else{
   document.getElementsByClassName("postButton")[0].style.cursor = "not-allowed";
-  document.getElementById("loginButton").style.cursor = "not-allowed";
-  console.log("求求你注册一个账号吧~ o(TﾍTo)");
 }
 //获取帖子
 var order = {key:"t",order:true};//排序标准默认是时间
@@ -217,16 +209,17 @@ add_link.onclick = function(){
 }
 */
 //签到
-document.getElementById("loginButton").onclick = debounce(async function login(){
+async function login(){
   if(!isLoggedIn){alert("点击右上角登录后才可以签到");return;}
-  if(isLoginToday){this.innerHTML = "今日已签";return;}
+  var dom = document.getElementById("loginButton");
+  if(isLoginToday){dom.innerHTML = "☑ 今日已签";return;}
   const date = new Date(new Date().setHours(0,0,0,0)+86400000).toGMTString();
   document.cookie= `isLoginToday=y;expires=${date};`;
-  this.innerHTML = "加载中...";
+  dom.innerHTML = "加载中...";
   const login = await supabase.rpc('login',{uid:u_id})
-  this.innerHTML = login.data;
+  dom.innerHTML = login.data;
   if(login.data == "签到成功"){alert("经验 +15")}
-},500)
+}
 
 document.getElementById("order").onclick = function(){
   this.innerHTML = (this.innerHTML=="新 /热") ? "热 /新" : "新 /热";
@@ -252,7 +245,6 @@ window.addEventListener("keydown",function(){
   if(element.tagName == "INPUT"&&key == "Enter"){search();return;}
   if(element.parentElement.className == "discuss"&&key == "Enter"){document.getElementsByClassName("discuss")[0].children[1].click();return;}
 });
-
 //百度统计
 if(location.href.indexOf("www.kingdinner.top")!=-1){
   var _hmt = _hmt || [];
@@ -265,15 +257,6 @@ if(location.href.indexOf("www.kingdinner.top")!=-1){
   console.log("网站统计已开启");
 }
 
-//防抖
-function debounce(func, delay) {
-  let timeout;
-  return function(...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {func.apply(this, args);}, delay);
-  };
-}
-window.onresize = debounce(usePhone,500);
 function usePhone(){
   var dashboard = document.getElementsByClassName("dashboard")[0].style;
   document.body.ontouchstart = null;
