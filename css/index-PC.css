@@ -40,10 +40,35 @@ html,body{
   z-index: 8;
   min-width: 320px;
 }
-.left,.right{
+.left{
   width: fit-content;
   line-height: 50px;
   margin: 0 10px;
+}
+.postButton{
+  cursor: pointer;
+  padding: 5px 10px;
+  background: #5dc9f9;
+  color: #fff;
+  font-weight: 600;
+  margin: 0 10px;
+}
+.postButton::after{
+  content: "发帖";
+}
+.postButton:hover{
+  background: #49c1f4;
+}
+.userAvatar{
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  background-size: 35px 35px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: smaller;
+  background-color: #4bc4f9;
+  border: solid #bbb;
 }
 .center{
   flex: 1;
@@ -52,9 +77,7 @@ html,body{
 }
 .left:hover,.right:hover{text-decoration: underline #222b2c;}
 .sousuokuang{
-  width:100px;
-  line-height:30px;
-  margin: auto 0;
+  width: 150px;
   padding: 0px 10px;
   border: 0;
   background-color: #ededed;
@@ -71,9 +94,39 @@ a{
   text-decoration:none;
   color:black;
 }
+.userBoard{
+  width: 180px;
+  background: #fff;
+  box-shadow: #ddd 0 0 5px;
+  position: fixed;
+  top: 50px;
+  right: 0px;
+  z-index: 8;
+  text-align: center;
+}
+#loginButton{
+  cursor: pointer;
+  margin: 10px 0;
+}
+.userBoard a{
+  display: block;
+  margin: 10px 0;
+}
 .wrapper{
   margin: 0 auto;
   display: flex;
+}
+.loading_p div{
+  background: linear-gradient(100deg,rgba(255,255,255,0) 40%,rgba(255,255,255,.5) 50%,rgba(255,255,255,0) 60%) #eee;
+  background-size: 200% 100%;
+  background-position-x: 120%;
+  animation: loading 1s ease-in-out infinite;
+}
+.loading_p .post_avatar{
+  background-size: 1000% 5000%;
+}
+@keyframes loading{
+  to{background-position-x: -20%;}
 }
 .post{
   width: 80%;
@@ -232,26 +285,6 @@ a{
   position: relative;
   top: 3px;
 }
-.postButton{
-  cursor: pointer;
-  padding: 5px 10px;
-  background: #ccc;
-  color: #fff;
-  text-align: center;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-#loginButton{
-  cursor: pointer;
-  padding: 5px 10px;
-  background: #ccc;
-  color: #fff;
-  text-align: center;
-  font-size: 14px;
-}
-.postButton:hover,#loginButton:hover{
-  background: #bbb;
-}
 textarea:focus{
   border: 0px;
   outline: 0px;
@@ -286,7 +319,7 @@ textarea:focus{
   float: left;
   margin-right: 10px;
 }
-.lv0,.lv1::after,.lv2::after,.lv3::after,.lv4::after,.lv5::after,.lv6::after{
+.lv0::after,.lv1::after,.lv2::after,.lv3::after,.lv4::after,.lv5::after,.lv6::after{
   padding: 0 5px;
   margin-left: 5px;
   font-size: 11px;
@@ -361,13 +394,20 @@ textarea:focus{
 
 @media screen and (max-width: 600px){
 body{font-size: 14px;}
-.left,.right{
+.left{
   line-height: 40px;
   margin: 0 6px;
 }
 .center{margin: 0;}
-.sousuokuang{height: 20px;}
+.sousuokuang{width: 100px;height: 20px;}
 #search{line-height: 20px;}
+.userAvatar{
+  width: 30px;
+  height: 30px;
+}
+.userBoard{
+  top: 40px;
+}
 .wrapper{
   width: 100%;
   overflow-x: hidden;
@@ -379,9 +419,6 @@ body{font-size: 14px;}
   max-width: 100%;
 }
 .dashboard{
-  transform: translateX(100%);
-  transition: 0.5s;
-  z-index: 9;
-  background: #fff;
+  display: none;
 }
 }

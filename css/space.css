@@ -2,7 +2,7 @@ body::-webkit-scrollbar{width:0px;}
 html,body{
   width:100%;
   height:100%;
-  background:#f1f8fa;
+  background: linear-gradient(to right, #65cbf7, #b3a5fc);
   display: flex;
   flex-direction: column;
   margin: 0px;
@@ -20,7 +20,7 @@ html,body{
   z-index: 10;
 }
 .bg{
-  background: rgb(0,0,0,.3);
+  background: rgb(0,0,0,0.4);
   width: 100%;
   height: 100%;
   position: fixed;
@@ -29,33 +29,45 @@ html,body{
   align-items: center;
 }
 .sign{
-  width: 750px;
-  height: 500px;
-  background-color: #fff;
+  width: 100%;
+  max-width: 600px;
+  min-height: 500px;
+  background-color: #ace3ffb3;
   border-radius: 10px;
-  display: flex;
-}
-.sign img{
-  height: 100%;
-}
-.sign div{
-  flex: 1;
-  background-color: #222b2c;
-  color: #fff;
+  color: #333;
   text-align: center;
+  backdrop-filter: blur(1px);
 }
-#signUp_buttom{
+#signUp_buttom,#signIn_buttom{
   cursor: pointer;
+  width: 50px;
+  line-height: 25px;
+  background: #fff;
+  margin: 10px auto;
+}
+#accept{
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+}
+.accept{
+  color: #ff2020;
+  display: none;
 }
 .header{
   width:100%;
-  background:#fff;
   position: sticky;
   top: 0;
   display: flex;
-  border-bottom: solid 2px #00000014;
   align-items: center;
   min-width: 320px;
+  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(1px);
+  background-color: #0000001a;
+  color: aliceblue;
+}
+.header a{
+  color: aliceblue;
 }
 .left,.right{
   width: fit-content;
@@ -69,24 +81,56 @@ html,body{
 }
 .left:hover,.right:hover{text-decoration: underline #222b2c;}
 .sousuokuang{
-  width:100px;
-  line-height:30px;
-  margin: auto 0;
+  width: 150px;
   padding: 0px 10px;
   border: 0;
-  background-color: #ededed;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: aliceblue;
 }
 .sousuokuang:focus{outline: 0px;}
+.sousuokuang:-moz-placeholder{color: aliceblue;}
+.sousuokuang:-ms-input-placeholder{color: aliceblue;}
+.sousuokuang::-webkit-input-placeholder{color: aliceblue;}
 #search{
-  border-left: 2px solid #fff;
+  margin-left: 2px;
   padding: 0px 10px;
-  background-color: #ededed;
+  background-color: rgba(0, 0, 0, 0.2);
   line-height: 30px;
   cursor: pointer;
 }
 a{
   text-decoration:none;
   color:black;
+}
+.userBoard{
+  width: 180px;
+  background: #fff;
+  box-shadow: #ddd 0 0 5px;
+  position: fixed;
+  top: 50px;
+  right: 0px;
+  z-index: 8;
+  text-align: center;
+}
+#loginButton{
+  cursor: pointer;
+  margin: 10px 0;
+}
+.userBoard a{
+  display: block;
+  margin: 10px 0;
+}
+.userAvatar{
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  background-size: 35px 35px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: smaller;
+  background-color: #4bc4f9;
+  border: solid #bbb;
+  margin-right: 10px;
 }
 .part_1,.part_2{
   background: #fff;
@@ -114,7 +158,7 @@ a{
 .avatar{
   cursor: zoom-in;
 }
-.lv0,.lv1::after,.lv2::after,.lv3::after,.lv4::after,.lv5::after,.lv6::after{
+.lv0::after,.lv1::after,.lv2::after,.lv3::after,.lv4::after,.lv5::after,.lv6::after{
   padding: 0 5px;
   margin-left: 5px;
   font-size: 11px;
@@ -176,7 +220,7 @@ a{
   font-size: 14px;
   transition: 0.3s;
 }
-input:focus{
+.userColumn input:focus{
   outline: 0px;
   border-bottom: 2px solid #000;
 }
@@ -229,3 +273,18 @@ input:focus{
   cursor: pointer;
 }
 .part_2 div:hover{text-decoration: underline #222b2c;}
+
+@media screen and (max-width: 600px){
+body{font-size: 14px;}
+.left,.right{
+  line-height: 40px;
+  margin: 0 6px;
+}
+.center{margin: 0;}
+.sousuokuang{width: 100px;height: 20px;}
+#search{line-height: 20px;}
+.userAvatar{
+  width: 30px;
+  height: 30px;
+}
+}

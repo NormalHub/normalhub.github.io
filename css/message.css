@@ -1,0 +1,245 @@
+body::-webkit-scrollbar{width:0px;}
+html,body{
+  width:100%;
+  height:100%;
+  background: linear-gradient(to bottom,#d6eae9,#fff);
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+}
+.alert{
+  position: fixed;
+  width: fit-content;
+  background: #252c34;
+  color: #fff;
+  padding: 0 10px;
+  top: 30px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 10;
+}
+.bg{
+  background: #00000080;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  z-index: 9;
+}
+.header{
+  width:100%;
+  background:#fff;
+  position: sticky;
+  top: 0;
+  display: flex;
+  border-bottom: solid 2px #00000014;
+  align-items: center;
+  z-index: 8;
+  min-width: 320px;
+}
+.left{
+  width: fit-content;
+  line-height: 50px;
+  margin: 0 10px;
+}
+.userAvatar{
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  background-size: 35px 35px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: smaller;
+  background-color: #4bc4f9;
+  border: solid #bbb;
+}
+.center{
+  flex: 1;
+  display: flex;
+  margin: 0 10px;
+}
+.left:hover,.right:hover{text-decoration: underline #222b2c;}
+.sousuokuang{
+  width: 150px;
+  padding: 0px 10px;
+  border: 0;
+  background-color: #ededed;
+}
+.sousuokuang:focus{outline: 0px;}
+#search{
+  border-left: 2px solid #fff;
+  padding: 0px 10px;
+  background-color: #ededed;
+  line-height: 30px;
+  cursor: pointer;
+}
+a{
+  text-decoration:none;
+  color:black;
+}
+.userBoard{
+  width: 180px;
+  background: #fff;
+  box-shadow: #ddd 0 0 5px;
+  position: fixed;
+  top: 50px;
+  right: 0px;
+  z-index: 8;
+  text-align: center;
+}
+#loginButton{
+  cursor: pointer;
+  margin: 10px 0;
+}
+.userBoard a{
+  display: block;
+  margin: 10px 0;
+}
+.wrapper{
+  margin: 0 auto;
+  display: flex;
+  height: calc(90% - 55px);
+}
+.side-bar{
+  padding: 10px;
+  background: rgba(255,255,255,.8);
+  margin-right: 10px;
+  text-align: center;
+}
+.side-bar li{margin-top: 10px;cursor: pointer;}
+.side-bar li:hover{color: #4daeff;}
+.main{
+  width: 600px;
+  background: rgba(255,255,255,.5);
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+.messagediv{
+  width: 100%;
+  padding: 10px;
+  border-bottom: #ddd 1px solid;
+  background: #fff;
+}
+.messagediv small{
+  margin-left: 10px;
+  color: #777;
+}
+.messagediv .content{
+  border: solid #eee;
+  border-width: 3px 0;
+  background-color: #f9f9f9;
+  margin-bottom: 1em;
+}
+.messagediv .content:empty{
+  display: none;
+}
+.chatside{
+  width: 200px;
+  background: #fdfdfd;
+  border-right: solid 2px #eee;
+  height: 100%;
+}
+.chatside div{padding: 10px;}
+.chatside div:hover{background: #f6f6f6;}
+.chatside b{display: none;}
+.chatside div:hover b{
+  float: right;
+  padding: 0 5px;
+  cursor: pointer;
+  border-radius: 3px;
+  display: block;
+  background: #e5e5e5;
+}
+.chatmain{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.chattitle{
+  width:100%;
+  height: 45px;
+  background:#f6f6f6;
+  position: sticky;
+  top: 0;
+  border-bottom: solid 2px #eee;
+  text-align: center;
+}
+.chatbar{
+  flex: 1;
+  background: #fff;
+  padding: 10px;
+}
+.me{
+  display: flex;
+  flex-direction: row-reverse;
+}
+.notme{
+  display: flex;
+}
+.chatinput{
+  width: 100%;
+  height: 200px;
+  border-top:solid 2px #eee;
+}
+#chattextarea{
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  border: 0;
+  background: #fdfdfd;
+  transition: 0.2s;
+  padding: 5px;
+  resize:none;
+}
+#chattextarea:focus{
+  background-color: #f6f6f6;
+}
+#send{
+  position: absolute;
+  right: 5px;
+  bottom: 10px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  width: fit-content;
+  background: #5dc9f9;
+  color: #fff;
+}
+#send::after{
+  content: "发送";
+}
+textarea:focus{
+  border: 0px;
+  outline: 0px;
+}
+.lv0::after,.lv1::after,.lv2::after,.lv3::after,.lv4::after,.lv5::after,.lv6::after{
+  padding: 0 5px;
+  margin-left: 5px;
+  font-size: 11px;
+  color: #fff;
+}
+.lv0::after{content: 'LV0';background: #ccc;}
+.lv1::after{content: 'LV1';background: #91e6ff;}
+.lv2::after{content: 'LV2';background: #4daeff;}
+.lv3::after{content: 'LV3';background: #cddc39;}
+.lv4::after{content: 'LV4';background: #f8b523;}
+.lv5::after{content: 'LV5';background: #ff6423;}
+.lv6::after{content: 'LV6';background: #f21212;}
+
+@media screen and (max-width: 600px){
+body{font-size: 14px;}
+.left{line-height: 40px;margin: 0 6px;}
+.center{margin: 0;}
+.sousuokuang{width: 100px;height: 20px;}
+#search{line-height: 20px;}
+.userAvatar{width: 30px;height: 30px;}
+.userBoard{top: 40px;}
+.wrapper{
+  width: 100%;
+}
+}

@@ -26,7 +26,7 @@ html,body{
   position: fixed;
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
   z-index: 9;
 }
 .header{
@@ -52,9 +52,7 @@ html,body{
 }
 .left:hover,.right:hover{text-decoration: underline #222b2c;}
 .sousuokuang{
-  width:100px;
-  line-height:30px;
-  margin: auto 0;
+  width: 150px;
   padding: 0px 10px;
   border: 0;
   background-color: #ededed;
@@ -70,6 +68,36 @@ html,body{
 a{
   text-decoration:none;
   color:black;
+}
+.userBoard{
+  width: 180px;
+  background: #fff;
+  box-shadow: #ddd 0 0 5px;
+  position: fixed;
+  top: 50px;
+  right: 0px;
+  z-index: 8;
+  text-align: center;
+  margin-right: 10px;
+}
+#loginButton{
+  cursor: pointer;
+  margin: 10px 0;
+}
+.userBoard a{
+  display: block;
+  margin: 10px 0;
+}
+.userAvatar{
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  background-size: 35px 35px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: smaller;
+  background-color: #4bc4f9;
+  border: solid #bbb;
 }
 .wrapper{
   margin: 0 auto;
@@ -153,12 +181,12 @@ a{
 }
 .post_actions{
   display: flex;
+  position: relative;
 }
-.post_actions a{
+.post_actions span{
   flex: 1;
   text-align: center;
-  font-size: 14px;
-  line-height: 20px;
+  cursor: pointer;
 }
 .support_y::before{
   content: "";
@@ -190,15 +218,36 @@ a{
   position: relative;
   top: 2px;
 }
-.pv::before{
-  content: "";
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background: url('../imgs/图标1.png') no-repeat -70px 0px;
-  background-size: 90px 20px;
-  position: relative;
-  top: 5px;
+#more{
+  font-size: 20px;
+}
+#moremenu{
+  width: 100px;
+  background: #cbdee357;
+  backdrop-filter: blur(1px);
+  position: absolute;
+  right: 0;
+  border-radius: 5px;
+  user-select: none;
+}
+#moremenu div{
+  text-align: center;
+  padding: 5px;
+  cursor: pointer;
+}
+#moremenu div:hover{
+  background: #a6b8bd57;
+}
+.report{
+  background: #fff;
+  padding: 15px;
+}
+.report input{
+  border-width: 0 0 2px 0;
+}
+.report input:focus{
+  outline: 0;
+  background: #eee;
 }
 .post_message{
   margin: 10px 0 10px 45px;
@@ -289,7 +338,7 @@ textarea:focus{
   margin-right: 10px;
   border-radius: 50%;
 }
-.lv0,.lv1::after,.lv2::after,.lv3::after,.lv4::after,.lv5::after,.lv6::after{
+.lv0::after,.lv1::after,.lv2::after,.lv3::after,.lv4::after,.lv5::after,.lv6::after{
   padding: 0 5px;
   margin-left: 5px;
   font-size: 11px;
@@ -360,7 +409,7 @@ textarea:focus{
 @media screen and (max-width: 600px){
 body{font-size: 14px;}
 .left,.right{line-height: 40px;}
-.sousuokuang{height: 20px;}
+.sousuokuang{width: 100px;height: 20px;}
 #search{line-height: 20px;}
 .left,.right{
   line-height: 40px;
@@ -378,10 +427,16 @@ body{font-size: 14px;}
 #posting,.post,#reply{
   max-width: calc(100% - 20px);
 }
-.dashboard{
-  transform: translateX(100%);
-  transition: 0.5s;
-  z-index: 9;
-  background: #fff;
+.report{
+  width: 92%;
+  height: 80%;
+  overflow: auto;
+}
+.userBoard{
+  top: 40px;
+}
+.userAvatar{
+  width: 30px;
+  height: 30px;
 }
 }
