@@ -2,7 +2,6 @@ import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+
 var SupabaseUrl = "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com";
 var SupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImV4cCI6MzI4ODM0Njc1NywiaWF0IjoxNzExNTQ2NzU3LCJpc3MiOiJzdXBhYmFzZSJ9.iee2MqZMWv-d3mRWC0YPdaganE9y58EEcw3xEh4aNk8";
 const supabase = createClient(SupabaseUrl, SupabaseKey);
-import {convertToHTML} from "./markdown.js";
 //多次调用
 function timeConverter(time_number){var d = new Date(Number(time_number));var year = d.getFullYear();var month = d.getMonth()+1;var day = d.getDate();var hour = d.getHours();var minute = d.getMinutes();if(month<10){month = "0" + month;}if(day<10){day = "0" + day;}if(hour<10){hour = "0" + hour;}if(minute<10){minute = "0" + minute;}var time_string = year+"/"+month+"/"+day+" "+hour+":"+minute;return time_string;}
 function alert(c){var alertDiv = document.createElement("div");alertDiv.className = "alert";alertDiv.innerHTML = c;document.body.appendChild(alertDiv);setTimeout(function(){alertDiv.remove();},3000);}
@@ -71,12 +70,6 @@ if(isLoggedIn){
     }
   }
 }
-function getPoster(u_name,post,support,avatar,intro){
-  if(intro == null){intro = "还没有简介呢";}
-  part_1.innerHTML = `<div class="userColumn"><div class="avatar" style="background-image:url(${avatar})"></div><div><b>${u_name}</b><p>${intro}</p></div></div>
-    <div class="profile"><div><b>${post}</b><p>帖子</p></div><div><b>${support}</b><p>获赞</p></div></div>`;
-}
-const lvlist = [0,100,555,1450,5834,10000,24096];
 var emojiArray = ["angry","anguished","anxious","beaming_smiling_eyes","broken_heart","clown","confused","disappointed","expressionless","blowing_a_kiss","exhaling","holding_back_tears","savoring_food","screaming_in_fear","vomiting","hand_over_mouth","head-bandage","open_eyes_hand_over_mouth","peeking_eye","raised_eyebrow","rolling_eyes","spiral_eyes","steam_from_nose","symbols_on_mouth","tears_of_joy","fearful","flushed","frowning","ghost","grimacing","grinning_smiling_eyes_1","grinning_sweat","hear-no-evil_monkey_1","hot","hundred_points","kissing_smiling_eyes","knocked-out","loudly_crying","money-mouth","nerd","neutral","persevering","pile_of_poo","pleading_1","pouting","red_heart_1","relieved","rolling_on_the_floor_laughing","sad_but_relieved","saluting","see-no-evil_monkey","shushing","sleeping","slightly_frowning","smiling_heart-eyes","smiling_smiling_eyes","smiling_sunglasses","smirking","speak-no-evil_monkey","squinting_tongue","sweat_droplets","thinking","unamused","upside-down","winking","worried","yawning","zany"];
 var posting_supported = cookieGet("support");
 if(posting_supported!=undefined){posting_supported = JSON.parse(posting_supported);}else{posting_supported=[]}
@@ -93,7 +86,6 @@ async function getPosting(){
   for(var t=6;t>-1;t--){if(lvlist[t]<data[0].exp){var lv = t+1;break;}}
   var avatar = (data[0].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
   var user = data[0].u_name;
-  getPoster(user,data[0].post,data[0].support,avatar,data[0].intro);
   for(var each=emojiArray.length;each>0;each--){
     var regex = new RegExp(`:${emojiArray[each-1]}:`, 'g');
     content = content.replace(regex,`<div class="post_emoji" style="background-position-x: ${(each-1)*-20}px;"></div>`);
