@@ -9,6 +9,7 @@ function cookieSet(content,expires_time){var date = new Date();date.setTime(date
 function cookieGet(keyword){var cookies = decodeURI(document.cookie).split("; ");for(var t=cookies.length;t--;t>0){if(cookies[t].indexOf(keyword)!=-1){return cookies[t].split("=")[1];}};}
 function cookieDelete(keyword){document.cookie = `${keyword}=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;}
 function sortArray(array, bol){return array.sort((a, b)=>{const {key,order} = bol,valueA = a[key], valueB = b[key];return valueA < valueB ? (order ? -1 : 1) : valueA > valueB ? (order ? 1 : -1) : 0;})}
+function md(str){str = str.replace(/\\n/g, '<br/>');str = str.replace(/</g, '&lt');str = str.replace(/>/g, '&gt');str = str.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$1">$2</a>');str = str.replace(/i\[(.*?)\]/g, '<img src="$1">');str = str.replace(/f\[(.*?)\]/g, '<iframe src="$1"></iframe>');return str;}
 //全局变量
 if(!window.location.search){location.href="www.kingdinner.top";}
 var cookies = decodeURI(document.cookie).split("; ");
@@ -25,7 +26,7 @@ const lvlist = [0,100,555,1450,5834,10000,24096];
 if(isLoggedIn){
   const {data} = await supabase.rpc('check_password',{uid:Number(u_id),password:password});
   const avatar = (data.avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${u_id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
-  if(data === null){
+  if(!data){
     alert("密码错误！请重新登录");
     isLoggedIn=false;
     cookieDelete("userName");
@@ -33,42 +34,40 @@ if(isLoggedIn){
     cookieDelete("id");
     setTimeout(function(){location.reload();},2500)
   }
-  if(data.intro == null){data.intro = "还没有简介呢";}
   useravatarDom.innerHTML = '';
   useravatarDom.style.backgroundImage = 'url('+avatar+')';
   useravatarDom.style.backgroundColor = '#fff';
   for(var t=6;t>-1;t--){if(lvlist[t]<data.exp){var lv = t+1;break;}}
-  if(document.body.offsetWidth <= 600){
-    useravatarDom.onclick = function(){
-      var div = document.createElement("div");
-      div.className = "bg";
-      div.innerHTML = `<div class="lv${lv}"><b>${userName}</b></div><progress value="${data.exp}" max="${lvlist[lv]}"></progress>
-      <p id="loginButton">☐ 每日签到</p>
-      <div class="userBoard"><a href="space.html" target="_blank">⌂ 个人中心</a>
-      <a href="message.html" target="_blank">✉ 消息通知</a>
-      <a href="space.html" target="_blank">☰ 帖子管理</a>
-      <a href="javascript:void(0);" onclick="document.cookie='userName=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';location.reload();">↲ 退出登录</a></div>`;
-      document.body.appendChild(div);
-      div.style.background = "none";
-      div.onclick = function(){this.remove();}
-    }
-  }else{
-    useravatarDom.onmouseover = function(){
-      var t;
-      clearTimeout(t);
-      var div = document.createElement("div");
-      div.className = "userBoard";
-      div.innerHTML = `<div class="lv${lv}"><b>${userName}</b></div><progress value="${data.exp}" max="${lvlist[lv]}"></progress>
-      <p id="loginButton">☐ 每日签到</p>
-      <a href="space.html" target="_blank">⌂ 个人中心</a>
-      <a href="message.html" target="_blank">✉ 消息通知</a>
-      <a href="space.html" target="_blank">☰ 帖子管理</a>
-      <a href="javascript:void(0);" onclick="document.cookie='userName=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';location.reload();">↲ 退出登录</a>`;
-      document.body.appendChild(div);
-      document.getElementById("loginButton").onclick = login;
-      useravatarDom.onmouseout = function(){t=setTimeout(function(){div.remove();this.onmouseout = null;},500);div.onmouseover = function(){clearTimeout(t);div.onmouseout= function(){t = setTimeout(function(){div.remove();this.onmouseout = null;this.onmouseover = null;},500)}}}
+  let div = document.createElement("div");
+  div.className = "userBoard";
+  div.innerHTML = `<div class="lv${lv}"><b>${userName}</b></div><progress value="${data.exp}" max="${lvlist[lv]}"></progress>
+  <p id="loginButton">☐ 每日签到</p>
+  <a href="space.html" target="_blank">⌂ 个人中心</a>
+  <a href="message.html" target="_blank">✉ 消息通知</a>
+  <a href="space.html" target="_blank">☰ 帖子管理</a>
+  <a href="javascript:void(0);" onclick="document.cookie='userName=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';location.reload();">⮐ 退出登录</a>`;
+  document.body.appendChild(div);
+  document.getElementById("loginButton").onclick = login;
+  let timer;
+  useravatarDom.onmouseover = function(){
+    clearTimeout(timer);
+    if(div.style.display == "block"){return;}
+    div.style.display = "block";
+    useravatarDom.onmouseout = function(){
+      timer=setTimeout(function(){div.style.display="none";this.onmouseout=null;div.onmouseover=null;},1000);div.onmouseover = function(){clearTimeout(timer);div.onmouseout= function(){timer=setTimeout(function(){div.style.display="none";this.onmouseout=null;this.onmouseover = null;},500)}}
     }
   }
+}
+async function login(){
+  if(!isLoggedIn){alert("点击右上角登录后才可以签到");return;}
+  var dom = document.getElementById("loginButton");
+  if(isLoginToday){dom.innerHTML = "☑ 今日已签";return;}
+  const date = new Date(new Date().setHours(0,0,0,0)+86400000).toGMTString();
+  document.cookie= `isLoginToday=y;expires=${date};`;
+  dom.innerHTML = "加载中...";
+  const login = await supabase.rpc('login',{uid:u_id})
+  dom.innerHTML = login.data;
+  if(login.data == "签到成功"){alert("经验 +15")}
 }
 var emojiArray = ["angry","anguished","anxious","beaming_smiling_eyes","broken_heart","clown","confused","disappointed","expressionless","blowing_a_kiss","exhaling","holding_back_tears","savoring_food","screaming_in_fear","vomiting","hand_over_mouth","head-bandage","open_eyes_hand_over_mouth","peeking_eye","raised_eyebrow","rolling_eyes","spiral_eyes","steam_from_nose","symbols_on_mouth","tears_of_joy","fearful","flushed","frowning","ghost","grimacing","grinning_smiling_eyes_1","grinning_sweat","hear-no-evil_monkey_1","hot","hundred_points","kissing_smiling_eyes","knocked-out","loudly_crying","money-mouth","nerd","neutral","persevering","pile_of_poo","pleading_1","pouting","red_heart_1","relieved","rolling_on_the_floor_laughing","sad_but_relieved","saluting","see-no-evil_monkey","shushing","sleeping","slightly_frowning","smiling_heart-eyes","smiling_smiling_eyes","smiling_sunglasses","smirking","speak-no-evil_monkey","squinting_tongue","sweat_droplets","thinking","unamused","upside-down","winking","worried","yawning","zany"];
 var posting_supported = cookieGet("support");
@@ -92,7 +91,7 @@ async function getPosting(){
   }
   posting.innerHTML = `<div class="post_avatar" style="background-image:url(${avatar})"></div>
   <div class='post_header'><b class="lv${lv}">${user}</b><small>${time}</small></div>
-  <div class="post_message">${content}</div>
+  <div class="post_message">${md(content)}</div>
   <div class="post_actions"><span id="${time_ms}" class="support_n" name="${id}">${support}</span><span class="reply">${reply}</span><span id="more">≡</span></div>`;
   
   for(var t=0;t<posting_supported.length;t++){
