@@ -103,6 +103,8 @@ a{
   right: 0px;
   z-index: 8;
   text-align: center;
+  font-family: "Segoe UI Symbol", arial, sans-serif;
+  display: none;
 }
 #loginButton{
   cursor: pointer;
@@ -219,7 +221,7 @@ a{
 }
 .postingdiv{
   width: 450px;
-  padding: 10px;
+  padding: 5px 10px 5px 5px;
   border-bottom: #777 1px solid;
   background: #fff;
 }
@@ -295,21 +297,6 @@ textarea:focus{
   top: 0;
   min-width: 260px;
 }
-.dashboard_part_1{
-  background: #fff;
-  max-width: 250px;
-  margin-bottom: 20px;
-  padding: 10px;
-  height: fit-content;
-}
-.dashboard_part_1 b{
-  font-size: 17px;
-}
-.dashboard_part_1 p{
-  line-height: 10px;
-  font-size: 14px;
-  color: #333;
-}
 .avatar{
   background-size: 50px 50px;
   background-image: url("https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png");
@@ -353,16 +340,6 @@ textarea:focus{
   content: 'LV6';
   background: #f21212;
 }
-.userColumn,.profile{
-  border-bottom: #777 2px solid;
-  margin-bottom: 10px;
-  display: flex;
-}
-.profile div{
-  flex: 1;
-  text-align: center;
-}
-.profile div:hover{color: #27bae7;}
 .dashboard_part_2{
   background: #fff;
   width: 100%;
@@ -382,14 +359,6 @@ textarea:focus{
   color: black;
   font-size: 25px;
   font-style: normal;
-}
-.dashboard_part_3{
-  background: #fff;
-  width: 100%;
-  text-align: center;
-  padding: 5px 0 15px;
-  line-height: 0;
-  height: fit-content;
 }
 
 @media screen and (max-width: 600px){

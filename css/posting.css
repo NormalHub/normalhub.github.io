@@ -78,7 +78,8 @@ a{
   right: 0px;
   z-index: 8;
   text-align: center;
-  margin-right: 10px;
+  font-family: "Segoe UI Symbol", arial, sans-serif;
+  display: none;
 }
 #loginButton{
   cursor: pointer;
@@ -251,6 +252,17 @@ a{
 }
 .post_message{
   margin: 10px 0 10px 45px;
+  line-height: 20px;
+}
+.post_message img{
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.post_message iframe{
+  border: 0;
+  width: 100%;
+  aspect-ratio: 125/77;
 }
 .post_message a{
   color: #2ca9eb;
