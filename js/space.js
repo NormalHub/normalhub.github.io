@@ -38,9 +38,8 @@ var useravatarDom = document.getElementsByClassName("userAvatar")[0];
 if(isLoggedIn){
   const {data} = await supabase.rpc('check_password',{uid:Number(u_id),password:password});
   const avatar = (data.avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${u_id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
-  if(data === null){
+  if(!data){
     alert("密码错误！请重新登录");
-    isLoggedIn=false;
     cookieDelete("userName");
     cookieDelete("password");
     cookieDelete("id");
@@ -51,35 +50,23 @@ if(isLoggedIn){
   useravatarDom.style.backgroundImage = 'url('+avatar+')';
   useravatarDom.style.backgroundColor = '#fff';
   for(var t=6;t>-1;t--){if(lvlist[t]<data.exp){var lv = t+1;break;}}
-  if(document.body.offsetWidth <= 600){
-    useravatarDom.onclick = function(){
-      var div = document.createElement("div");
-      div.className = "bg";
-      div.innerHTML = `<div class="lv${lv}"><b>${userName}</b></div><progress value="${data.exp}" max="${lvlist[lv]}"></progress>
-      <p id="loginButton">☐ 每日签到</p>
-      <div class="userBoard"><a href="space.html" target="_blank">⌂ 个人中心</a>
-      <a href="message.html" target="_blank">✉ 消息通知</a>
-      <a href="space.html" target="_blank">☰ 帖子管理</a>
-      <a href="javascript:void(0);" onclick="document.cookie='userName=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';location.reload();">↲ 退出登录</a></div>`;
-      document.body.appendChild(div);
-      div.style.background = "none";
-      div.onclick = function(){this.remove();}
-    }
-  }else{
-    useravatarDom.onmouseover = function(){
-      var t;
-      clearTimeout(t);
-      var div = document.createElement("div");
-      div.className = "userBoard";
-      div.innerHTML = `<div class="lv${lv}"><b>${userName}</b></div><progress value="${data.exp}" max="${lvlist[lv]}"></progress>
-      <p id="loginButton">☐ 每日签到</p>
-      <a href="space.html" target="_blank">⌂ 个人中心</a>
-      <a href="message.html" target="_blank">✉ 消息通知</a>
-      <a href="space.html" target="_blank">☰ 帖子管理</a>
-      <a href="javascript:void(0);" onclick="document.cookie='userName=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';location.reload();">↲ 退出登录</a>`;
-      document.body.appendChild(div);
-      document.getElementById("loginButton").onclick = login;
-      useravatarDom.onmouseout = function(){t=setTimeout(function(){div.remove();this.onmouseout = null;},500);div.onmouseover = function(){clearTimeout(t);div.onmouseout= function(){t = setTimeout(function(){div.remove();this.onmouseout = null;this.onmouseover = null;},500)}}}
+  let div = document.createElement("div");
+  div.className = "userBoard";
+  div.innerHTML = `<div class="lv${lv}"><b>${userName}</b></div><progress value="${data.exp}" max="${lvlist[lv]}"></progress>
+  <p id="loginButton">☐ 每日签到</p>
+  <a href="space.html" target="_blank">⌂ 个人中心</a>
+  <a href="message.html" target="_blank">✉ 消息通知</a>
+  <a href="space.html" target="_blank">☰ 帖子管理</a>
+  <a href="javascript:void(0);" onclick="document.cookie='userName=;expires=Thu, 01 Jan 1970 00:00:00 GMT;';location.reload();">⮐ 退出登录</a>`;
+  document.body.appendChild(div);
+  document.getElementById("loginButton").onclick = login;
+  let timer;
+  useravatarDom.onmouseover = function(){
+    clearTimeout(timer);
+    if(div.style.display == "block"){return;}
+    div.style.display = "block";
+    useravatarDom.onmouseout = function(){
+      timer=setTimeout(function(){div.style.display="none";this.onmouseout=null;div.onmouseover=null;},1000);div.onmouseover = function(){clearTimeout(timer);div.onmouseout= function(){timer=setTimeout(function(){div.style.display="none";this.onmouseout=null;this.onmouseover = null;},500)}}
     }
   }
 }
@@ -328,13 +315,13 @@ if(isLoggedIn && visit == undefined){
     document.getElementsByClassName("follow_buttom")[0].innerHTML = "已关注";
   }
   document.getElementsByClassName("follow_buttom")[0].onclick = async function(){
-    var fansLengthDom = document.getElementById("fansLength");
+    let fansLengthDom = document.getElementById("fansLength");
     if(this.innerHTML == "关注"){
       fans.push(u_id);
       const {error} = await supabase.from('user').update({fans:fans.toString()}).eq('u_name',visit);
       this.innerHTML = "已关注";
     }else{
-      var index = fans.indexOf(u_id);
+      let index = fans.indexOf(u_id);
       fans.splice(index,1);
       fans = (fans.toString()==="") ? null : fans.toString();
       const {error} = await supabase.from('user').update({fans:fans}).eq('u_name',visit);

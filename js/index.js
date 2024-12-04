@@ -10,7 +10,7 @@ function cookieSet(content,expires_time){var date = new Date();date.setTime(date
 function cookieGet(keyword){var cookies = decodeURI(document.cookie).split("; ");for(var t=cookies.length;t--;t>0){if(cookies[t].indexOf(keyword)!=-1){return cookies[t].split("=")[1];}}}
 function cookieDelete(keyword){document.cookie = `${keyword}=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;}
 function sortArray(array, bol){return array.sort((a, b)=>{const { key, order } = bol, valueA = a[key], valueB = b[key];return valueA < valueB ? (order ? -1 : 1) : valueA > valueB ? (order ? 1 : -1) : 0;});}
-function md(str){str = str.replace(/\\n/g, '<br/>');str = str.replace(/</g, '&lt');str = str.replace(/>/g, '&gt');str = str.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$1">$2</a>');str = str.replace(/i\[(.*?)\]/g, '[图片]');str = str.replace(/f\[(.*?)\]/g, '[框架]');str = str.replace(/\\n/g, '<br/>');return str;}
+function md(str){str = str.replace(/</g, '&lt');str = str.replace(/>/g, '&gt');str = str.replace(/\\n/g, '<br/>');str = str.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$1">$2</a>');str = str.replace(/i\[(.*?)\]/g, '[图片]');str = str.replace(/f\[(.*?)\]/g, '[框架]');str = str.replace(/\\n/g, '<br/>');return str;}
 
 var userName = cookieGet("userName");
 const password = cookieGet("password");
@@ -66,9 +66,12 @@ async function getPostings(){
   if(posting_supported!=undefined){posting_supported = JSON.parse(posting_supported);}else{posting_supported=[]}
   sortArray(data,order);
   postings.innerHTML = "";
+  var posterBoard = document.createElement("div");
+  posterBoard.id = "posterBoard";
+  document.body.appendChild(posterBoard);
   for(var i=data.length;i--;i>0){
-    var time_ms = data[i].t,
-      content = data[i].c,
+    let time_ms = data[i].t,
+      content = md(data[i].c),
       support = data[i].s,
       reply = data[i].r,
       id = data[i].u,
@@ -76,7 +79,7 @@ async function getPostings(){
       time = timeConverter(time_ms),
       user = data[i].u_name,
       exp = data[i].exp;
-    var avatar = (data[i].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
+    let avatar = (data[i].avatar) ? `https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/${id}.png` : "https://co2231a5g6hfi0gtjmd0.baseapi.memfiredb.com/storage/v1/object/public/avatar/默认.png";
     for(var each=emojiArray.length;each>0;each--){
       var regex = new RegExp(`:${emojiArray[each-1]}:`, 'g');
       content = content.replace(regex,`<div class="post_emoji" style="background-position-x: ${(each-1)*-20}px;"></div>`);
@@ -86,13 +89,18 @@ async function getPostings(){
     postingDiv.classList.add("postingdiv");
     postingDiv.innerHTML = `<div class="post_avatar" style="background-image: url(${avatar})"></div>
     <div class='post-header'><a target="_bank" href="./space.html?u=${user}" style="font-weight: bold;" class="lv${lv}">${user}</a><small>${time}</small></div>
-    <div class="post_message">${md(content)}</div>
+    <div class="post_message">${content}</div>
     <div class="post-actions"><a href="javascript:void(0);" id="${time_ms}" class="support_n" name="${id}">${support}</a><a href="./t.html?id=${time_ms}&poster=${id}" target="_blank" class="reply">${reply}</a><a href="./t.html?id=${time_ms}&poster=${id}" target="_blank" class="more">查看详情</a></div>`;
     postings.appendChild(postingDiv);
     
-    for(var t=0;t<posting_supported.length;t++){
-      if(posting_supported[t] == time_ms){document.getElementById(time_ms).className="support_y";}
+    for(var t=0;t<posting_supported.length;t++){if(posting_supported[t] == time_ms){document.getElementById(time_ms).className="support_y";break;}}
+    
+    document.getElementsByClassName("post_avatar")[data.length-i-1].onclick = function(){
+      if(isLoggedIn){posterBoard.innerHTML = this.nextElementSibling.children[0].outerHTML+`<a href="./message.html?${id}" target="_bank" id="whisper">私聊</a>`;}
+      posterBoard.style.top = event.pageY+"px";
+      posterBoard.style.left = event.pageX+"px";
     }
+    
     document.getElementById(time_ms).addEventListener("click",async function(){
       var postingId = this.id;
       var sender_id = this.name;
@@ -207,14 +215,6 @@ async function login(){
   dom.innerHTML = login.data;
   if(login.data == "签到成功"){alert("经验 +15")}
 }
-
-document.getElementById("order").onclick = function(){
-  this.innerHTML = (this.innerHTML=="新 /热") ? "热 /新" : "新 /热";
-  order = (order.key=="t" && order.order==true) ? {key:"s",order:true} : {key:"t",order:true};
-  getPostings();
-}
-document.getElementById("style").onclick = function(){alert("还在开发中")}
-
 //搜素
 document.getElementById("search").onclick = search;
 function search(){
@@ -242,53 +242,4 @@ if(location.href.indexOf("www.kingdinner.top")!=-1){
     s.parentNode.insertBefore(hm, s);
   })();
   console.log("网站统计已开启");
-}
-
-function usePhone(){
-  var dashboard = document.getElementsByClassName("dashboard")[0].style;
-  document.body.ontouchstart = null;
-  if(document.body.offsetWidth <= 600){
-    var bool = false;//默认没有左滑打开侧边栏
-    document.body.ontouchstart = function(){
-      var startX = event.targetTouches[0].pageX,startY = event.targetTouches[0].pageY;
-      var endX,endY;
-      document.body.ontouchmove = function(){endX = event.targetTouches[0].pageX;endY = event.targetTouches[0].pageY;}
-      document.body.ontouchend = function(){
-        var posX = endX-startX,posY = endY-startY;
-        if(posY > 100 && Math.abs(posX) < Math.abs(posY)){}//下拉刷新页面
-        if(posX > 100 && Math.abs(posX) > Math.abs(posY)){
-          //右滑
-        }else if(posX <-100 && Math.abs(posX) > Math.abs(posY)){
-          //左滑出现用户栏
-          if(bool == true){return;}
-          bool = true;
-          dashboard.transform = "translateX(-100%)";
-          var div = document.createElement("div");
-          div.className = "bg";
-          div.style.zIndex = 8;
-          dashboard.zIndex = 9;
-          div.onclick = function(){
-            bool = false;
-            dashboard.transform = "translateX(100%)";
-            div.remove();
-            dashboard.zIndex = 0;
-            div.onclick = null;
-          }
-          document.body.appendChild(div);
-        }
-        //解绑事件
-        document.body.ontouchmove = null;
-        document.body.ontouchend = null;
-      }
-    }
-  }else if(dashboard.transform == "translateX(100%)"){
-    dashboard.transform = "translateX(0%)";
-    dashboard.zIndex = 0;
-  }
-}
-usePhone();
-async function returnError(){
-  var userAgent = navigator.userAgent+","+document.body.offsetWidth+""+document.body.offsetHeight;
-  var c = document.getElementById("error").value;
-  var {error} = await supabase.from('error').insert({equipment: userAgent,error: c});
 }
