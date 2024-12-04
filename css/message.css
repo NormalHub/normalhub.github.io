@@ -1,8 +1,8 @@
-body::-webkit-scrollbar{width:0px;}
+::-webkit-scrollbar{width:0px;}
 html,body{
   width:100%;
   height:100%;
-  background: linear-gradient(to bottom,#d6eae9,#fff);
+  background: linear-gradient(to right, #65cbf7, #b3a5fc);
   display: flex;
   flex-direction: column;
   margin: 0px;
@@ -31,15 +31,18 @@ html,body{
 }
 .header{
   width:100%;
-  background:#fff;
   position: sticky;
   top: 0;
   display: flex;
-  border-bottom: solid 2px #00000014;
   align-items: center;
   z-index: 8;
   min-width: 320px;
+  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(1px);
+  background-color: #0000001a;
+  color: aliceblue;
 }
+.header a{color: aliceblue;}
 .left{
   width: fit-content;
   line-height: 50px;
@@ -66,13 +69,11 @@ html,body{
   width: 150px;
   padding: 0px 10px;
   border: 0;
-  background-color: #ededed;
 }
 .sousuokuang:focus{outline: 0px;}
 #search{
   border-left: 2px solid #fff;
   padding: 0px 10px;
-  background-color: #ededed;
   line-height: 30px;
   cursor: pointer;
 }
@@ -89,6 +90,8 @@ a{
   right: 0px;
   z-index: 8;
   text-align: center;
+  font-family: "Segoe UI Symbol", arial, sans-serif;
+  display: none;
 }
 #loginButton{
   cursor: pointer;
@@ -113,7 +116,7 @@ a{
 .side-bar li:hover{color: #4daeff;}
 .main{
   width: 600px;
-  background: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.6);
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
@@ -122,7 +125,8 @@ a{
   width: 100%;
   padding: 10px;
   border-bottom: #ddd 1px solid;
-  background: #fff;
+  margin: 10px 5px 0;
+  background: #f9fcff;
 }
 .messagediv small{
   margin-left: 10px;
@@ -142,27 +146,21 @@ a{
   background: #fdfdfd;
   border-right: solid 2px #eee;
   height: 100%;
+  overflow: auto;
 }
 .chatside div{padding: 10px;}
 .chatside div:hover{background: #f6f6f6;}
-.chatside b{display: none;}
-.chatside div:hover b{
-  float: right;
-  padding: 0 5px;
-  cursor: pointer;
-  border-radius: 3px;
-  display: block;
-  background: #e5e5e5;
-}
+.chatside div::before{content: "#";}
 .chatmain{
   flex: 1;
   display: flex;
   flex-direction: column;
   position: relative;
+  height: 100%;
 }
 .chattitle{
   width:100%;
-  height: 45px;
+  height: 35px;
   background:#f6f6f6;
   position: sticky;
   top: 0;
@@ -173,6 +171,7 @@ a{
   flex: 1;
   background: #fff;
   padding: 10px;
+  overflow: auto;
 }
 .me{
   display: flex;
@@ -180,6 +179,12 @@ a{
 }
 .notme{
   display: flex;
+}
+.mdiv{
+  margin: 5px 0;
+  padding: 0 5px;
+  background: #dcedc8;
+  border-radius: 3px;
 }
 .chatinput{
   width: 100%;
@@ -230,7 +235,6 @@ textarea:focus{
 .lv4::after{content: 'LV4';background: #f8b523;}
 .lv5::after{content: 'LV5';background: #ff6423;}
 .lv6::after{content: 'LV6';background: #f21212;}
-
 @media screen and (max-width: 600px){
 body{font-size: 14px;}
 .left{line-height: 40px;margin: 0 6px;}
@@ -241,5 +245,17 @@ body{font-size: 14px;}
 .userBoard{top: 40px;}
 .wrapper{
   width: 100%;
+  flex-direction: column;
+  height: calc(100vh - 40px);
 }
+.side-bar{
+  margin: 0;
+  display: flex;
+}
+.side-bar li{
+  margin: 0 5px;
+}
+.main{width: 100%;height: calc(100vh - 80px);}
+.chatside{width: fit-content;}
+.chatinput{height: fit-content;}
 }

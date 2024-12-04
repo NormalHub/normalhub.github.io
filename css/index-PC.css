@@ -130,6 +130,22 @@ a{
 @keyframes loading{
   to{background-position-x: -20%;}
 }
+#posterBoard{
+  background-color: #fff;
+  position: absolute;
+  padding: 5px;
+}
+#whisper{
+  background: #5dc9f9;
+  color: #fff;
+  font-size: 13px;
+  padding: 2.5px 5px;
+  display: block;
+  margin-top: 5px;
+}
+#whisper:hover{
+  background: #49c1f4;
+}
 .post{
   width: 80%;
   max-width: 750px;
@@ -143,6 +159,7 @@ a{
   border-radius: 50%;
   float: left;
   margin-right: 10px;
+  cursor: pointer;
 }
 .post_header{
   width: 100%;
@@ -340,27 +357,6 @@ textarea:focus{
   content: 'LV6';
   background: #f21212;
 }
-.dashboard_part_2{
-  background: #fff;
-  width: 100%;
-  color: #888;
-  text-align: center;
-  line-height: 30px;
-  margin-bottom: 20px;
-  display: flex;
-  height: fit-content;
-}
-#order,#style{
-  flex: 1;
-  cursor: pointer;
-  font-style:italic;
-}
-#order:first-letter,#style::first-letter{
-  color: black;
-  font-size: 25px;
-  font-style: normal;
-}
-
 @media screen and (max-width: 600px){
 body{font-size: 14px;}
 .left{

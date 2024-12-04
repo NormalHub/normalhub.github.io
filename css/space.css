@@ -111,6 +111,8 @@ a{
   right: 0px;
   z-index: 8;
   text-align: center;
+  font-family: "Segoe UI Symbol", arial, sans-serif;
+  display: none;
 }
 #loginButton{
   cursor: pointer;
