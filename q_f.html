@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="二次函数工具,根据三点求二次函数表达式">
+<title>二次函数工具</title>
+<link rel="icon" href="./imgs/xie.png">
+<meta name="robots" content="all"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, user-scalable=0">
+<!-- <link rel="stylesheet" type="text/css" href="./css/quadratic_function.css"/> -->
+<style>
+  body::-webkit-scrollbar{width:0px;}html,body{width:100%;height:100%;background:#f1f8fa;display: flex;flex-direction: column;margin: 0px;}.alert{position: fixed;width: fit-content;background: #252c34;color: #fff;padding: 0 10px;top: 30px;left: 0;right: 0;margin: auto;z-index: 10;}.bg{background: #00000080;width: 100%;height: 100%;position: fixed;display: flex;justify-content: center;align-content: center;z-index: 9;}.header{width:100%;background:#fff;position: sticky;top: 0;display: flex;border-bottom: solid 2px #00000014;align-items: center;z-index: 8;min-width: 320px;}.left{width: fit-content;line-height: 50px;margin: 0 10px;}.userAvatar{width: 35px;height: 35px;line-height: 35px;background-size: 35px 35px;border-radius: 50%;text-align: center;font-size: smaller;background-color: #4bc4f9;border: solid #bbb;}.center{flex: 1;display: flex;margin: 0 10px;}.left:hover,.right:hover{text-decoration: underline #222b2c;}.sousuokuang{width: 150px;padding: 0px 10px;border: 0;background-color: #ededed;}.sousuokuang:focus{outline: 0px;}#search{border-left: 2px solid #fff;padding: 0px 10px;background-color: #ededed;line-height: 30px;cursor: pointer;}a{text-decoration:none;color:black;}#title{background: #26a69a;font-size: 18px;font-weight: 700;border-radius: 0 15px 0 0;width: fit-content;padding: 10px;color: #fff;margin: 0 10px;}#hr{height: 2px;margin: 0 10px;background: #26a69a;}#wrapper{background: #fff;margin: 0 10px;flex: 1;padding: 10px;}#function,#image{padding-top: 10px;border-top: 1px solid #bbb;}#express_input:focus,.point:focus{outline: 0px;box-shadow: #bbb 0 0 5px;}#express_input{min-width: 7em;display: inline-block;border-bottom: 1px solid #000;line-height: 25px;padding: 0 5px;}.point{min-width: 3em;display: inline-block;border-bottom: 1px solid #000;line-height: 25px;}#tip{color: red;}#jxgbox{width: 100%;max-width: 360px;aspect-ratio: 4 / 3;}#expression #conversion{margin: 0 0 10px 4em;color: #999;}@media screen and (max-width: 600px){body{font-size: 14px;}.left{line-height: 40px;margin: 0 6px;}.center{margin: 0;}.sousuokuang{width: 100px;height: 20px;}#search{line-height: 20px;}#wrapper{margin: 0;}#jxgbox{max-width: none;}}
+</style>
+<link href="//cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraph.css" rel="stylesheet" type="text/css" />
+<script src="//cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraphcore.js" type="text/javascript" charset="UTF-8"></script>
+</head>
+<body>
+<div class="header"> <div class="left"><a href="//www.kingdinner.top">疯人院</a></div> <div class="center"><input placeholder="搜索" class="sousuokuang" id="searchInput"/><div id="search">↗</div></div></div>
+<div id="title">二次函数工具</div>
+<div id="hr"></div>
+<div id="wrapper"> <div id="expression"> 表达式：y = <div contenteditable="true" id="express_input"></div> <p id="conversion"></p> </div> <div id="function"> <b>输入已知点求表达式</b> <button onclick="compute()">确定</button><br/> 顶点：( <div contenteditable="true" class="point"></div> )<br/> 点 1：( <div contenteditable="true" class="point"></div> )<br/> 点 2：( <div contenteditable="true" class="point"></div> )<br/> 点 3：( <div contenteditable="true" class="point"></div> )<br/> <p id="tip"></p> </div> <div id="image"> <b>图像</b> <button onclick="zoom()">复位</button> <div id="jxgbox" class="jxgbox"></div> </div> </div>
+<script>
+const board = JXG.JSXGraph.initBoard('jxgbox', {boundingbox: [-5, 2, 5, -2],pan: {needShift: false},zoom:{needShift: false,max:50,min:0.05},keepAspectRatio:true/*保持比例*/,axis:true/*轴线*/, showCopyright:false/*水印*/, showNavigation:false/*控件*/ });
+let f = board.create('functiongraph',[function(x){return x*x-2*x+1}]);
+function zoom(){board.zoom100();}
+var sgn;
+class Fraction{
+  constructor(numerator, denominator = 1) {this.numerator = numerator;this.denominator = denominator;this.simplify();}
+  simplify() {const gcd = this.greatestCommonDivisor(this.numerator, this.denominator);this.numerator /= gcd;this.denominator /= gcd;if (this.denominator < 0) {this.numerator = -this.numerator;this.denominator = -this.denominator;}}
+  greatestCommonDivisor(a, b) {return b === 0 ? Math.abs(a) : this.greatestCommonDivisor(b, a % b);}
+  minus(other){return new Fraction(this.numerator * other.denominator - other.numerator * this.denominator,this.denominator * other.denominator);}
+  multiply(other) {return new Fraction(this.numerator * other.numerator,this.denominator * other.denominator);}
+  divide(other){return new Fraction(this.numerator * other.denominator,this.denominator * other.numerator);}
+  sqr(){return new Fraction(this.numerator * this.numerator,this.denominator * this.denominator);}
+  toString(s){sgn = "";if(!s && this.numerator>=0){sgn = "+";}if (this.denominator === 1){return `${sgn}${this.numerator}`;}return `${sgn}${this.numerator}/${this.denominator}`;}
+}
+function findQuadraticFunction(p1, p2, p3){const [x1, y1] = p1;const [x2, y2] = p2;const [x3, y3] = p3;const detA = (x1**2 * (x2 - x3)) + (x2**2 * (x3 - x1)) + (x3**2 * (x1 - x2));a = new Fraction((y1 * (x2 - x3)) + (y2 * (x3 - x1)) + (y3 * (x1 - x2)),detA);b = new Fraction((x1**2 * (y2 - y3)) + (x2**2 * (y3 - y1)) + (x3**2 * (y1 - y2)),detA);c = new Fraction((x1**2 * (x2 * y3 - x3 * y2)) + (x2**2 * (x3 * y1 - x1 * y3)) + (x3**2 * (x1 * y2 - x2 * y1)),detA);}
+let a,b,c;//系数
+let p;//已知坐标
+let point;//用来输入的input
+function compute(){
+  p=[];
+  point = document.body.getElementsByClassName("point");
+  document.getElementById("tip").innerHTML = "";
+  for(let t=0;t<point.length;t++){if(point[t].innerHTML){p.push([point[t].innerHTML.split(",")[0],point[t].innerHTML.split(",")[1]]);}}
+  if(point[0].innerHTML){p.push([p[0][0]*2-p[1][0],p[1][1]]);}else if(p.length<3){document.getElementById("tip").innerHTML = "条件不足";return;}
+  findQuadraticFunction(p[0], p[1], p[2]);
+  document.getElementById("express_input").innerHTML = `${a.toString("special")}*x^2${b.toString()}*x${c.toString()}`;
+  document.getElementById("conversion").innerHTML = `y = ( x${b.divide(a.multiply(new Fraction(2))).toString()} )²${(a.multiply(c.multiply(new Fraction(4))).minus(b.sqr())).divide(a.multiply(new Fraction(4))).toString()}`
+  update_f();
+}
+function debounce(f, d){let timeout;return function(...args){clearTimeout(timeout);timeout = setTimeout(()=>f(...args), d);};}
+document.getElementById("express_input").addEventListener('input', debounce(update_f,600));
+function update_f(){f.Y = board.jc.snippet(document.getElementById("express_input").innerHTML, true, 'x');;board.update();}
+var l_X = board.create('line', [[0,0],[1,0]],{strokeColor: '#000',strokeWidth: 1,fixed: true,dash:2});
+var l_Y = board.create('line', [[0,0],[0,1]],{strokeColor: '#000',strokeWidth: 1,fixed: true,dash:2});
+// 监听鼠标移动事件
+var mouseCoords = function(e, i){var cPos = board.getCoordsTopLeftCorner(e, i),absPos = JXG.getPosition(e, i),dx = absPos[0]-cPos[0],dy = absPos[1]-cPos[1];return new JXG.Coords(JXG.COORDS_BY_SCREEN, [dx, dy], board);}
+var i, mCoords;
+const p_a = board.create('intersection', [l_X, f, 0])
+,p_b = board.create('intersection', [l_X, f, 1])
+,p_c = board.create('intersection', [l_Y, f, 0]);
+board.on('move', function(e){if(e[JXG.touchProperty]){i = 0;}mCoords = mouseCoords(e, i).usrCoords;l_X.setPosition([0,mCoords[2]+l_X.stdform[0]],[1,mCoords[2]+l_X.stdform[0]]);l_Y.setPosition([mCoords[1]-l_Y.stdform[0],0], [mCoords[1]-l_Y.stdform[0],1]);p_a.moveTo("");});
+</script>
+</body>
+</html>
